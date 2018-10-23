@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!--
+  HORTONWORKS DATAPLANE SERVICE AND ITS CONSTITUENT SERVICES
+
+  (c) 2016-2018 Hortonworks, Inc. All rights reserved.
+
+  This code is provided to you pursuant to your written agreement with Hortonworks, which may be the terms of the
+  Affero General Public License version 3 (AGPLv3), or pursuant to a written agreement with a third party authorized
+  to distribute this code.  If you do not have a written agreement with Hortonworks or with an authorized and
+  properly licensed third party, you do not have any rights to this code.
+
+  If this code is provided to you under the terms of the AGPLv3:
+  (A) HORTONWORKS PROVIDES THIS CODE TO YOU WITHOUT WARRANTIES OF ANY KIND;
+  (B) HORTONWORKS DISCLAIMS ANY AND ALL EXPRESS AND IMPLIED WARRANTIES WITH RESPECT TO THIS CODE, INCLUDING BUT NOT
+    LIMITED TO IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE;
+  (C) HORTONWORKS IS NOT LIABLE TO YOU, AND WILL NOT DEFEND, INDEMNIFY, OR HOLD YOU HARMLESS FOR ANY CLAIMS ARISING
+    FROM OR RELATED TO THE CODE; AND
+  (D) WITH RESPECT TO YOUR EXERCISE OF ANY RIGHTS GRANTED TO YOU FOR THE CODE, HORTONWORKS IS NOT LIABLE FOR ANY
+    DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES INCLUDING, BUT NOT LIMITED TO,
+    DAMAGES RELATED TO LOST REVENUE, LOST PROFITS, LOSS OF INCOME, LOSS OF BUSINESS ADVANTAGE OR UNAVAILABILITY,
+    OR LOSS OR CORRUPTION OF DATA.
+-->
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration supports_adding_forbidden="true">
+  <property>
+    <name>data_analytics_studio_event_processor_server_protocol</name>
+    <value>http</value>
+    <description>Data Analytics Studio Event Processor server protocol (http or https - only http supported in beta)</description>
+    <display-name>Data Analytics Studio Event Processor server protocol</display-name>
+    <on-ambari-upgrade add="true"/>
+    <value-attributes>
+      <read-only>true</read-only>
+      <overridable>false</overridable>
+    </value-attributes>
+  </property>
+  <property>
+    <name>data_analytics_studio_event_processor_server_port</name>
+    <value>30900</value>
+    <description>Data Analytics Studio Event Processor server port</description>
+    <display-name>Data Analytics Studio Event Processor server port</display-name>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>data_analytics_studio_event_processor_admin_server_port</name>
+    <value>30901</value>
+    <description>Data Analytics Studio Event Processor admin server port</description>
+    <display-name>Data Analytics Studio Event Processor admin server port</display-name>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>content</name>
+    <display-name>Data Analytics Studio Event Processor config file template</display-name>
+    <description>This is the jinja template for das-event-processor.json file</description>
+    <value/>
+    <property-type>VALUE_FROM_PROPERTY_FILE</property-type>
+    <value-attributes>
+      <property-file-name>das-event-processor.json.j2</property-file-name>
+      <property-file-type>text</property-file-type>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+</configuration>

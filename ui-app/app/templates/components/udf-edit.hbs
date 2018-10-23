@@ -1,0 +1,99 @@
+{{!
+ *   HORTONWORKS DATAPLANE SERVICE AND ITS CONSTITUENT SERVICES
+ *
+ *   (c) 2016-2018 Hortonworks, Inc. All rights reserved.
+ *
+ *   This code is provided to you pursuant to your written agreement with Hortonworks, which may be the terms of the
+ *   Affero General Public License version 3 (AGPLv3), or pursuant to a written agreement with a third party authorized
+ *   to distribute this code.  If you do not have a written agreement with Hortonworks or with an authorized and
+ *   properly licensed third party, you do not have any rights to this code.
+ *
+ *   If this code is provided to you under the terms of the AGPLv3:
+ *   (A) HORTONWORKS PROVIDES THIS CODE TO YOU WITHOUT WARRANTIES OF ANY KIND;
+ *   (B) HORTONWORKS DISCLAIMS ANY AND ALL EXPRESS AND IMPLIED WARRANTIES WITH RESPECT TO THIS CODE, INCLUDING BUT NOT
+ *     LIMITED TO IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE;
+ *   (C) HORTONWORKS IS NOT LIABLE TO YOU, AND WILL NOT DEFEND, INDEMNIFY, OR HOLD YOU HARMLESS FOR ANY CLAIMS ARISING
+ *     FROM OR RELATED TO THE CODE; AND
+ *   (D) WITH RESPECT TO YOUR EXERCISE OF ANY RIGHTS GRANTED TO YOU FOR THE CODE, HORTONWORKS IS NOT LIABLE FOR ANY
+ *     DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES INCLUDING, BUT NOT LIMITED TO,
+ *     DAMAGES RELATED TO LOST REVENUE, LOST PROFITS, LOSS OF INCOME, LOSS OF BUSINESS ADVANTAGE OR UNAVAILABILITY,
+ *     OR LOSS OR CORRUPTION OF DATA.
+}}
+
+
+<div class="row">
+<div class="col-md-12">
+
+    <form class="form-horizontal">
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">UDF Name</label>
+        <div class="col-sm-6 {{if udfErrorObj.udfName 'has-error'}}">
+          {{input type="text" class="form-control" placeholder="Udf Name" value=name }}
+          <span class="help-block">{{if udfErrorObj.udfName 'UDF Name can not be empty.'}}</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">UDF Class Name</label>
+        <div class="col-sm-6 {{if udfErrorObj.udfClassName 'has-error'}}">
+          {{input type="text" class="form-control" placeholder="Udf Class Name" value=classname }}
+          <span class="help-block">{{if udfErrorObj.udfClassName 'UDF Class Name can not be empty.'}}</span>
+        </div>
+      </div>
+
+
+      <div class="form-group" style="margin-top: -10px">
+        <label class="col-sm-2 control-label label-padding-top-15">File Resource</label>
+        <div class="col-sm-6 {{if udfErrorObj.fileResource 'has-file-resource-error'}}">
+
+          {{#unless isAddingNewFileResource}}
+            {{#power-select
+            options=fileResourceList
+            placeholder="File Resource"
+            searchField="name"
+            selected=selectedFileResource
+            searchPlaceholder="Type the paramter"
+            onchange=(action "handleResourceChange" ) as |filter| }}
+              {{filter.name}}
+            {{/power-select}}
+            <span class="help-block">{{if udfErrorObj.fileResource 'Please select File Resource.'}}</span>
+          {{/unless}}
+
+          {{#if isAddingNewFileResource}}
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Resource name</label>
+              <div class="col-sm-6 {{if udfErrorObj.fileResourceName 'has-error'}}">
+                {{input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0"  placeholder="File Resource Name" value=resourceName }}
+                <span class="help-block">{{if udfErrorObj.fileResourceName 'File Resource Name can not be empty.'}}</span>
+              </div>
+              <div class="col-sm-3"><button class="btn-link" {{action 'goToAddNewFileResource'}} >Existing File Resources</button></div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Resource Path</label>
+              <div class="col-sm-6 {{if udfErrorObj.fileResourcePath 'has-error'}}">
+                {{input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0"  placeholder="File Resource path" value=resourcePath }}
+                <span class="help-block">{{if udfErrorObj.fileResourcePath 'File Resource Path can not be empty.'}}</span>
+              </div>
+            </div>
+          {{/if}}
+
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-top:25px;">
+        <div class="col-sm-offset-2 col-sm-6">
+          <button class="btn btn-success btn-sm" type="button" {{action 'saveUDf' name classname udfid udfFileResourceName udfFileResourcePath}}>Save UDF</button>
+          <button class="btn btn-warning btn-sm" type="button" {{action 'cancelEditUdf'}}>Cancel</button>
+        </div>
+      </div>
+
+
+    </form>
+
+
+</div>
+</div>
+
+{{yield}}

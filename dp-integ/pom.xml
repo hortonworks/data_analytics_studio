@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  HORTONWORKS DATAPLANE SERVICE AND ITS CONSTITUENT SERVICES
+
+  (c) 2016-2018 Hortonworks, Inc. All rights reserved.
+
+  This code is provided to you pursuant to your written agreement with Hortonworks, which may be the terms of the
+  Affero General Public License version 3 (AGPLv3), or pursuant to a written agreement with a third party authorized
+  to distribute this code.  If you do not have a written agreement with Hortonworks or with an authorized and
+  properly licensed third party, you do not have any rights to this code.
+
+  If this code is provided to you under the terms of the AGPLv3:
+  (A) HORTONWORKS PROVIDES THIS CODE TO YOU WITHOUT WARRANTIES OF ANY KIND;
+  (B) HORTONWORKS DISCLAIMS ANY AND ALL EXPRESS AND IMPLIED WARRANTIES WITH RESPECT TO THIS CODE, INCLUDING BUT NOT
+    LIMITED TO IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE;
+  (C) HORTONWORKS IS NOT LIABLE TO YOU, AND WILL NOT DEFEND, INDEMNIFY, OR HOLD YOU HARMLESS FOR ANY CLAIMS ARISING
+    FROM OR RELATED TO THE CODE; AND
+  (D) WITH RESPECT TO YOUR EXERCISE OF ANY RIGHTS GRANTED TO YOU FOR THE CODE, HORTONWORKS IS NOT LIABLE FOR ANY
+    DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES INCLUDING, BUT NOT LIMITED TO,
+    DAMAGES RELATED TO LOST REVENUE, LOST PROFITS, LOSS OF INCOME, LOSS OF BUSINESS ADVANTAGE OR UNAVAILABILITY,
+    OR LOSS OR CORRUPTION OF DATA.
+-->
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.hortonworks.das</groupId>
+    <artifactId>das</artifactId>
+    <version>1.0.2-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>das-dp-ui-app</artifactId>
+  <name>Data Analytics Studio DP UI Application</name>
+
+  <properties>
+    <!-- UI related configurations -->
+    <ui.dir>${basedir}/dp-ui-app/</ui.dir>
+    <node.version>v8.11.3</node.version>
+    <npm.version>6.3.0</npm.version>
+    <npm.executable>${ui.dir}/node/npm</npm.executable>
+    <skipTests>true</skipTests>
+    <skipUiClean>false</skipUiClean>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.github.eirslett</groupId>
+        <artifactId>frontend-maven-plugin</artifactId>
+        <version>1.4</version>
+        <configuration>
+          <workingDirectory>${ui.dir}</workingDirectory>
+        </configuration>
+        <executions>
+
+          <!-- Install all dependencies -->
+          <execution>
+            <phase>generate-resources</phase>
+            <id>install node and yarn</id>
+            <goals>
+              <goal>install-node-and-npm</goal>
+            </goals>
+            <configuration>
+              <nodeVersion>${node.version}</nodeVersion>
+              <npmVersion>${npm.version}</npmVersion>
+            </configuration>
+          </execution>
+          <execution>
+            <phase>generate-resources</phase>
+            <id>npm install</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <configuration>
+              <arguments>install</arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <phase>generate-resources</phase>
+            <id>npm build</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <configuration>
+              <arguments>run build</arguments>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>3.0.0</version>
+        <configuration>
+          <skip>${skipUiClean}</skip>
+          <filesets>
+            <fileset>
+              <directory>${ui.dir}</directory>
+              <includes>
+                <include>node_modules/**</include>
+                <include>node/**</include>
+                <include>tmp/**</include>
+                <include>dist/**</include>
+              </includes>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

@@ -1,0 +1,322 @@
+{{!
+ *   HORTONWORKS DATAPLANE SERVICE AND ITS CONSTITUENT SERVICES
+ *
+ *   (c) 2016-2018 Hortonworks, Inc. All rights reserved.
+ *
+ *   This code is provided to you pursuant to your written agreement with Hortonworks, which may be the terms of the
+ *   Affero General Public License version 3 (AGPLv3), or pursuant to a written agreement with a third party authorized
+ *   to distribute this code.  If you do not have a written agreement with Hortonworks or with an authorized and
+ *   properly licensed third party, you do not have any rights to this code.
+ *
+ *   If this code is provided to you under the terms of the AGPLv3:
+ *   (A) HORTONWORKS PROVIDES THIS CODE TO YOU WITHOUT WARRANTIES OF ANY KIND;
+ *   (B) HORTONWORKS DISCLAIMS ANY AND ALL EXPRESS AND IMPLIED WARRANTIES WITH RESPECT TO THIS CODE, INCLUDING BUT NOT
+ *     LIMITED TO IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE;
+ *   (C) HORTONWORKS IS NOT LIABLE TO YOU, AND WILL NOT DEFEND, INDEMNIFY, OR HOLD YOU HARMLESS FOR ANY CLAIMS ARISING
+ *     FROM OR RELATED TO THE CODE; AND
+ *   (D) WITH RESPECT TO YOUR EXERCISE OF ANY RIGHTS GRANTED TO YOU FOR THE CODE, HORTONWORKS IS NOT LIABLE FOR ANY
+ *     DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES INCLUDING, BUT NOT LIMITED TO,
+ *     DAMAGES RELATED TO LOST REVENUE, LOST PROFITS, LOSS OF INCOME, LOSS OF BUSINESS ADVANTAGE OR UNAVAILABILITY,
+ *     OR LOSS OR CORRUPTION OF DATA.
+}}
+<div class="warehouse-create-page">
+  <div class="row">
+    <div class="col col-sm-2">
+      <ul class="nav nav-pills main nav-stacked">
+        <li class="active"><a href="#info" {{action "setCompleted"}} data-toggle="tab">Warehouse Info</a></li>
+        <li><a href="#data" {{action "setCompleted"}} data-toggle="tab">Data Source</a></li>
+        <li><a href="#schema" extraAction="ADD TABLE" {{action "setCompleted"}} data-toggle="tab">Define Schema</a></li>
+        <li><a href="#db" {{action "setCompleted"}} data-toggle="tab">Database</a></li>
+        <li><a href="#security" {{action "setCompleted"}} data-toggle="tab">Security & Governance</a></li>
+        <li><a href="#review" {{action "setCompleted"}} data-toggle="tab">Review</a></li>
+      </ul>
+    </div>
+
+    <div class="col col-sm-10">
+      <div class="row tab-content">
+
+        <div class="tab-pane fade active in" id="info">
+
+          <form class="panel">
+            <h4>General Information</h4>
+            <div class="form-group required">
+              <label>Warehouse Name</label>
+              {{input class="form-control" value=data.name}}
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              {{textarea class="form-control" value=data.description}}
+            </div>
+            <div class="form-group required">
+              <label>Data Lake</label> <i class="fa fa-question-circle"></i>
+              <select class="form-control" onchange={{action (mut data.location) value="target.value"}}>
+                {{#each dataLakeLocations as |location|}}
+                  <option value={{location}} selected={{eq data.location location}}>{{location}}</option>
+                {{/each}}
+              </select>
+            </div>
+          </form>
+
+          <div class="buttons-panel">
+            {{#link-to "warehouses.index" classNames="pull-left"}}
+              <button type="button" class="btn btn-default cancel-btn">CANCEL</button>
+            {{/link-to}}
+            <ul class="list-inline pull-right">
+              <li><button type="button" class="btn btn-success" {{action "next"}}>NEXT</button></li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="tab-pane fade" id="data">
+
+          <form class="panel">
+            <h4>Data Source</h4>
+            <div class="form-group hs-style required">
+              <label>Storage Provider</label> <i class="fa fa-question-circle"></i>
+              {{#power-select
+                options=dataStores
+                selected=data.storageProvider
+                searchEnabled=false
+                onchange=(action (mut data.storageProvider))
+              as |dataStore|}}
+                <img width="20" src={{dataStore.icon}}/> {{dataStore.name}}
+              {{/power-select}}
+            </div>
+            <div class="form-group required">
+              <label>Storage Location</label> <i class="fa fa-question-circle"></i>
+              {{input class="form-control" value=data.storagePath}}
+            </div>
+          </form>
+
+          <form class="panel">
+            <h4>Destination</h4>
+            <div class="form-group required">
+              <label>Database Name</label> <i class="fa fa-question-circle"></i>
+              {{input class="form-control" value=data.destDBName}}
+            </div>
+            <div class="form-check form-check-inline">
+              <label class="form-check-label">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="managed"> Managed Table
+              </label>
+            </div>
+            <div class="form-check form-check-inline">
+              <label class="form-check-label">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="inline"> External Table
+              </label>
+            </div>
+          </form>
+
+          <div class="buttons-panel">
+            {{#link-to "warehouses.index" classNames="pull-left"}}
+              <button type="button" class="btn btn-default cancel-btn">CANCEL</button>
+            {{/link-to}}
+            <ul class="list-inline pull-right">
+              <li><button type="button" class="btn btn-default" {{action "previous"}}>BACK</button></li>
+              <li><button type="button" class="btn btn-success" {{action "next"}}>NEXT</button></li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="tab-pane fade" id="schema">
+
+          <form class="panel">
+            <h4>Confirm Schema</h4>
+            <div>Schema was auto created by crawling data, correct any mistakes you see below before proceeding.</div>
+          </form>
+
+          <div class="table-schemas">
+            {{#each data.selectedTables as |selectedTable|}}
+              {{table-schema selectedTable=selectedTable}}
+            {{/each}}
+          </div>
+
+          <div class="buttons-panel">
+            {{#link-to "warehouses.index" classNames="pull-left"}}
+              <button type="button" class="btn btn-default cancel-btn">CANCEL</button>
+            {{/link-to}}
+            <ul class="list-inline pull-right">
+              <li><button type="button" class="btn btn-default" {{action "previous"}}>BACK</button></li>
+              <li><button type="button" class="btn btn-success" {{action "next"}}>NEXT</button></li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="tab-pane fade" id="db">
+
+          <form class="panel">
+            <h4>Database</h4>
+            <div class="form-group required">
+              <label>Database Name</label> <i class="fa fa-question-circle"></i>
+              {{input class="form-control" value=data.dBName}}
+            </div>
+
+            <div class="form-group">
+              <label>Default Storage Location</label> <i class="fa fa-question-circle"></i>
+              {{input class="form-control" value=data.storageLocation}}
+            </div>
+
+            <div class="form-group">
+              <label>Staging Location</label> <i class="fa fa-question-circle"></i>
+              {{input class="form-control" value=data.stagingLocation}}
+            </div>
+
+            <div class="form-check form-check-inline">
+              <label class="form-check-label">
+                <input class="form-check-input pin-left" type="checkbox" name="enableExternalAccess" id="enableExternalAccess" value="managed"> Enable External Access
+              </label> <i class="fa fa-question-circle"></i>
+            </div>
+
+          </form>
+
+          <div class="buttons-panel">
+            {{#link-to "warehouses.index" classNames="pull-left"}}
+              <button type="button" class="btn btn-default cancel-btn">CANCEL</button>
+            {{/link-to}}
+            <ul class="list-inline pull-right">
+              <li><button type="button" class="btn btn-default" {{action "previous"}}>BACK</button></li>
+              <li><button type="button" class="btn btn-success" {{action "next"}}>NEXT</button></li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="tab-pane fade" id="security">
+
+          <form class="panel">
+            <h4>Security & Governance</h4>
+            <div class="form-group">
+              <label>Policies</label> <i class="fa fa-question-circle"></i>
+              {{#power-select-multiple
+                class="hs-style"
+                options=securityPolicies
+                selected=data.securityPolicy
+                onchange=(action (mut data.securityPolicy))
+              as |policy|}}
+                {{policy}}
+              {{/power-select-multiple}}
+            </div>
+
+            <div class="form-group">
+              <label>Tags</label> <i class="fa fa-question-circle"></i>
+              {{#power-select-multiple
+                class="hs-style"
+                options=securityTags
+                selected=data.securityTag
+                onchange=(action (mut data.securityTag))
+              as |securityTag|}}
+                {{securityTag}}
+              {{/power-select-multiple}}
+            </div>
+          </form>
+
+          <div class="buttons-panel">
+            {{#link-to "warehouses.index" classNames="pull-left"}}
+              <button type="button" class="btn btn-default cancel-btn">CANCEL</button>
+            {{/link-to}}
+            <ul class="list-inline pull-right">
+              <li><button type="button" class="btn btn-default" {{action "previous"}}>BACK</button></li>
+              <li><button type="button" class="btn btn-success" {{action "next"}}>NEXT</button></li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="tab-pane fade" id="review">
+
+          <div class="row">
+            <div class="col col-sm-9">
+              <div class="panel">
+                <h4>Warehouse Info</h4>
+                <table>
+                  <tr>
+                    <td>Name</td>
+                    <td>{{data.name}}</td>
+                  </tr>
+                  <tr>
+                    <td>Description</td>
+                    <td>{{data.description}}</td>
+                  </tr>
+                  <tr>
+                    <td>Data Lake</td>
+                    <td>{{data.location}}</td>
+                  </tr>
+                </table>
+              </div>
+              <div class="panel">
+                <h4>Database</h4>
+                <table>
+                  <tr>
+                    <td>Database Name</td>
+                    <td>{{data.dBName}}</td>
+                  </tr>
+                  <tr>
+                    <td>Default Storage Location</td>
+                    <td>{{data.storageLocation}}</td>
+                  </tr>
+                  <tr>
+                    <td>Staging Location</td>
+                    <td>{{data.stagingLocation}}</td>
+                  </tr>
+                  <tr>
+                    <td>Tables</td>
+                    <td>{{data.selectedTables.length}}</td>
+                  </tr>
+                  <tr>
+                    <td>Storage</td>
+                    <td>{{data.capacity}} TB</td>
+                  </tr>
+                </table>
+              </div>
+              <div class="panel">
+                <h4>Security & Governance</h4>
+                <table>
+                  <tr>
+                    <td>Policies</td>
+                    <td>{{data.securityPolicy}}</td>
+                  </tr>
+                  <tr>
+                    <td>Tags</td>
+                    <td>{{data.securityTag}}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="col col-sm-3">
+
+              {{#each data.selectedTables as |selectedTable|}}
+                <div class="panel column-names">
+                  <h4>{{selectedTable.destinationTableName}} <i class="fa fa-question-circle"></i></h4>
+                  <table class="indent">
+                    {{#each selectedTable.columns as |column|}}
+                      <tr>
+                        <td><div class="column-name">{{column.name}}</div></td>
+                        <td>{{column.type}}</td>
+                      </tr>
+                    {{/each}}
+                  </table>
+                </div>
+
+              {{/each}}
+            </div>
+          </div>
+
+          <div class="buttons-panel">
+            {{#link-to "warehouses.index" classNames="pull-left"}}
+              <button type="button" class="btn btn-default cancel-btn">CANCEL</button>
+            {{/link-to}}
+            <ul class="list-inline pull-right">
+              <li><button type="button" class="btn btn-default" {{action "previous"}}>BACK</button></li>
+              <li><button type="button" class="btn btn-success" {{action "finish" data}}>FINISH</button></li>
+            </ul>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>

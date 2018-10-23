@@ -1,0 +1,265 @@
+/*
+ *
+ * HORTONWORKS DATAPLANE SERVICE AND ITS CONSTITUENT SERVICES
+ *
+ * (c) 2016-2018 Hortonworks, Inc. All rights reserved.
+ *
+ * This code is provided to you pursuant to your written agreement with Hortonworks, which may be the terms of the
+ * Affero General Public License version 3 (AGPLv3), or pursuant to a written agreement with a third party authorized
+ * to distribute this code.  If you do not have a written agreement with Hortonworks or with an authorized and
+ * properly licensed third party, you do not have any rights to this code.
+ *
+ * If this code is provided to you under the terms of the AGPLv3:
+ * (A) HORTONWORKS PROVIDES THIS CODE TO YOU WITHOUT WARRANTIES OF ANY KIND;
+ * (B) HORTONWORKS DISCLAIMS ANY AND ALL EXPRESS AND IMPLIED WARRANTIES WITH RESPECT TO THIS CODE, INCLUDING BUT NOT
+ *   LIMITED TO IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE;
+ * (C) HORTONWORKS IS NOT LIABLE TO YOU, AND WILL NOT DEFEND, INDEMNIFY, OR HOLD YOU HARMLESS FOR ANY CLAIMS ARISING
+ *   FROM OR RELATED TO THE CODE; AND
+ * (D) WITH RESPECT TO YOUR EXERCISE OF ANY RIGHTS GRANTED TO YOU FOR THE CODE, HORTONWORKS IS NOT LIABLE FOR ANY
+ *   DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES INCLUDING, BUT NOT LIMITED TO,
+ *   DAMAGES RELATED TO LOST REVENUE, LOST PROFITS, LOSS OF INCOME, LOSS OF BUSINESS ADVANTAGE OR UNAVAILABILITY,
+ *   OR LOSS OR CORRUPTION OF DATA.
+ *
+ */
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  font-size: 13px;
+  font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background: #eee;
+  color: #666;
+  line-height: 1;
+  min-width: 1366px;
+}
+
+.fa-times {
+  position: absolute;
+  cursor: pointer;
+  font-size: 1.5em;
+  top: 25px;
+  right: 30px; }
+
+.color1 {
+  background: linear-gradient(45deg, #4ae7a6, #45bec5); }
+
+.color2 {
+  background: linear-gradient(45deg, #00fcf1, #00c3c6); }
+
+.color3 {
+  background: linear-gradient(45deg, #00fcf1, #c078c6); }
+
+.color4 {
+  background: linear-gradient(45deg, #ff86b9, #7366ff); }
+
+.color5 {
+  background: linear-gradient(45deg, #ff86b9, #7366ff); }
+
+.color6 {
+  background: linear-gradient(45deg, #ff86b9, #7366ff); }
+
+.gbackround {
+  width: 100%;
+  border-radius: 10px;
+  position: relative;
+  margin-bottom: 20px;
+  padding-bottom: 40px;
+  line-height: 22px; }
+
+.instancebox {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  position: relative;
+  margin-bottom: 20px;
+  background: linear-gradient(45deg, #ff86b9, #7366ff); }
+
+.instanceboxhighlight {
+  width: 616px;
+  height: 86px;
+  border-radius: 10px;
+  position: absolute;
+  background: #FFF;
+  left: 2px;
+  top: 2px;
+  z-index: 1; }
+
+.highlight {
+  width: 50%;
+  height: 90%;
+  position: absolute;
+  top: 5%;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4));
+  clip-path: polygon(0 0, 100% 0%, 85% 100%, 0% 100%); }
+
+.connectbutton {
+  color: #FFF;
+  font-family: sans-serif;
+  font-size: 24px;
+  width: auto;
+  display: inline-block;
+  position: relative;
+  top: 50px;
+  cursor: pointer; }
+
+.connectbutton:hover {
+  text-shadow: 0 0 10px #FFF; }
+
+.connectbutton a{
+  color: white;
+  text-decoration: none;}
+
+.textblock {
+  color: #FFF;
+  font-family: sans-serif;
+  width: 25%;
+  display: inline-block;
+  padding-left: 20px;
+  position: relative;
+  top: 20px;
+  vertical-align: top; }
+
+.textitle {
+  font-size: 12px;
+  font-weight: lighter;
+  margin-bottom: 10px;
+}
+
+.text {
+  font-size: 24px;
+}
+
+.instancetextblock {
+  width: 50%;
+  float: left;
+  z-index: 1000;
+  font-family: sans-serif;
+  padding-left: 5%;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%); }
+
+.instancetextitle {
+  font-size: 10px;
+  font-weight: lighter; }
+
+.createbutton {
+  font-family: sans-serif;
+  font-size: 24px;
+  width: 25%;
+  float: right;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  cursor: pointer; }
+
+.createbutton:hover {
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.create-instance-modal, .cluster-details-form {
+  width: 100%; }
+
+.create-instance-modal .fa-times, .cluster-details-form .fa-times {
+  right: -30px;
+}
+
+.create-instance-modal .textblock {
+  width: 30%; }
+.create-instance-modal .highlight {
+  width: 35%; }
+.create-instance-modal .template-panel {
+  width: 300px;
+  display: inline-block;
+  margin-right: 5px;
+  text-align: left;
+  cursor: pointer; }
+
+.create-instance-modal .template-panel .textblock {
+  vertical-align: top;
+}
+
+.create-instance-modal .template-panel.custom {
+  width: 90px;
+  border-radius: 50px;
+  margin-left: 265px;
+  cursor: pointer;
+}
+
+.create-instance-modal .template-panel.custom .text {
+  font-size: 1.5em;
+  margin-left: 2px;
+}
+
+.das-dp-nav{
+  width: 50px;
+  display: inline-block;
+  vertical-align: top;
+  height: 100%;
+  position: fixed;
+  z-index: 200;
+  top: 0;
+  left: 0;
+  background: #323544;
+  overflow-x: hidden;
+}
+
+.das-dp-nav img{
+  width: 25px;
+  float: left;
+  margin-top: 15px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.das-clusters-container{
+  min-width: 1000px;
+  display: inline-block;
+  vertical-align: top;
+  margin-left: 60px;
+  margin-top: 50px;
+  padding: 10px;
+}
+
+.loader {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
+
+.header{
+  background-color: #FFF;
+  height: 60px;
+  min-height: 60px;
+  z-index: 100;
+  width: inherit;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.header-breadcrumb{
+  font-size: 20px;
+  color: #646977;
+  line-height: 60px;
+  padding-right: 5px;
+  padding-left: 70px;
+}
+
+.hwx-title {
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.mini-meta-data {
+  position: relative;
+  top: 45px;
+}
+.das-info {
+  font-size: 15px;
+}

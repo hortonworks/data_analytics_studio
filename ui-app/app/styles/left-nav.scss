@@ -1,0 +1,182 @@
+/*
+ *
+ * HORTONWORKS DATAPLANE SERVICE AND ITS CONSTITUENT SERVICES
+ *
+ * (c) 2016-2018 Hortonworks, Inc. All rights reserved.
+ *
+ * This code is provided to you pursuant to your written agreement with Hortonworks, which may be the terms of the
+ * Affero General Public License version 3 (AGPLv3), or pursuant to a written agreement with a third party authorized
+ * to distribute this code.  If you do not have a written agreement with Hortonworks or with an authorized and
+ * properly licensed third party, you do not have any rights to this code.
+ *
+ * If this code is provided to you under the terms of the AGPLv3:
+ * (A) HORTONWORKS PROVIDES THIS CODE TO YOU WITHOUT WARRANTIES OF ANY KIND;
+ * (B) HORTONWORKS DISCLAIMS ANY AND ALL EXPRESS AND IMPLIED WARRANTIES WITH RESPECT TO THIS CODE, INCLUDING BUT NOT
+ *   LIMITED TO IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE;
+ * (C) HORTONWORKS IS NOT LIABLE TO YOU, AND WILL NOT DEFEND, INDEMNIFY, OR HOLD YOU HARMLESS FOR ANY CLAIMS ARISING
+ *   FROM OR RELATED TO THE CODE; AND
+ * (D) WITH RESPECT TO YOUR EXERCISE OF ANY RIGHTS GRANTED TO YOU FOR THE CODE, HORTONWORKS IS NOT LIABLE FOR ANY
+ *   DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES INCLUDING, BUT NOT LIMITED TO,
+ *   DAMAGES RELATED TO LOST REVENUE, LOST PROFITS, LOSS OF INCOME, LOSS OF BUSINESS ADVANTAGE OR UNAVAILABILITY,
+ *   OR LOSS OR CORRUPTION OF DATA.
+ *
+ */
+
+$top-header-height: 46px;
+.main-page .left-menu .list-group-item {
+
+  cursor: pointer;
+  border: none;
+  background-color: #323544;
+}
+
+.main-page .left-menu .list-group-item a {
+  color: #b6bcc3;
+  text-decoration: none;
+
+}
+.left-pane, .menu-toggler {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.main-page .left-menu .list-group-item .active {
+  color: #ffffff;
+}
+.main-page .left-menu .list-group-item.menu span:hover, .main-page .left-menu .list-group-item.sub-menu span.main:hover,  .sub-menu-items:hover{
+  background-color: #3F4250;
+  color: #ffffff;
+}
+.main-page .left-menu .list-group-item.menu.active span, .main-page .left-menu .list-group-item.sub-menu.active span.main, .main-page .left-menu .list-group-item.sub-menu.active span.main, .sub-menu .list-group li.active span{
+  background-color: #3F4250;
+  color: #ffffff;
+}
+.main-page .left-menu .list-group-item.menu:hover a, .main-page .left-menu .list-group-item.sub-menu li:hover a, .main-page .left-menu .list-group-item.main.active a {
+  color: #ffffff;
+}
+.logo {
+ position: relative;
+ left: 3px;
+ top: 2px;
+}
+.menu-toggler {
+  position: fixed;
+  bottom: 0;
+  background-color: #303D54;
+  height: 40px;
+}
+.left-menu {
+  height: 100vh;
+  background-color: #323544;
+  position: fixed;
+
+  z-index: 99999;
+}
+.left-pane.col-sm-2, .left-pane .left-menu, .menu-toggler.col-sm-2{
+  width: 12%;
+}
+.right-pane, .right-header-menu {
+  width: 88%;
+}
+.left-pane.col-sm-1, .left-menu-icons .left-menu, .menu-toggler.col-sm-1 {
+  width: 3.5%;
+}
+.menu-toggler i {
+  top: 15%;
+  left: 43%;
+  position: relative;
+  color: green;
+  cursor: pointer;
+}
+.project-header {
+  position: relative;
+  background-color: #303D54;
+  color: white;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.project-header-block {
+  position: relative;
+  top: -2px;
+
+  font-size: 12px;
+  letter-spacing: 1px;
+  font-weight: 700;
+  color: #e6e7e8;
+  @extend .logo;
+}
+.project-header-small {
+  position: absolute;
+  top: 25px;
+  left: 48.5px;
+
+  font-size: 10px;
+  letter-spacing: 1.3px;
+  font-weight: 100;
+  color: #f1f2f2;
+  @extend .logo;
+}
+.menu-label {
+  padding-left: 10px;
+}
+.menu-icon {
+  padding-left: 5px;
+}
+.left-menu-icons, .menu-toggler-min {
+  width: 3.5%;
+}
+.right-pane {
+  padding-top:$top-header-height;
+}
+.right-header-menu {
+  position:fixed;
+  top:0;
+  height: $top-header-height;
+  background-color: #FFF;
+  padding-left: 10px;
+  z-index: 99999;
+}
+.right-header-menu .main-title {
+  color: #999;
+}
+.right-header-menu .sub-title {
+  color: #CCC;
+}
+.sub-menu ul {
+  margin-top : 10px;
+  margin-bottom : 0px;
+}
+.right-menu-expanded {
+  width:96.5%;
+}
+.list-group-item .main, .sub-menu-items{
+  position: relative;
+  display: block;
+  padding: 10px 15px;
+  margin-bottom: -1px;
+}
+.list-group-item.menu, .list-group-item.sub-menu, .list-group-item.sub-menu li{
+  position: relative;
+  display: inline;
+  padding: 0px;
+  margin-bottom: 0px;
+}
+.sub-menu-items {
+  position: relative;
+  display: block;
+  padding: 10px 35px;
+  margin-bottom: -1px;
+}
+.sub-menu .list-group li.active span{
+  background-color: #3F4250;
+  color: #ffffff;
+}
+.left-green-arrow {
+  position: relative;
+  bottom: 0px;
+  right: 5px;
+  color: green;
+  font-size: 2.5em !important;
+}
+.left-menu li ul {
+  margin-top: 0px;
+}

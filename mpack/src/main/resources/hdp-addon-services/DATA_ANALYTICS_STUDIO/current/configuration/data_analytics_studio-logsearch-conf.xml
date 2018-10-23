@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<!--
+  HORTONWORKS DATAPLANE SERVICE AND ITS CONSTITUENT SERVICES
+
+  (c) 2016-2018 Hortonworks, Inc. All rights reserved.
+
+  This code is provided to you pursuant to your written agreement with Hortonworks, which may be the terms of the
+  Affero General Public License version 3 (AGPLv3), or pursuant to a written agreement with a third party authorized
+  to distribute this code.  If you do not have a written agreement with Hortonworks or with an authorized and
+  properly licensed third party, you do not have any rights to this code.
+
+  If this code is provided to you under the terms of the AGPLv3:
+  (A) HORTONWORKS PROVIDES THIS CODE TO YOU WITHOUT WARRANTIES OF ANY KIND;
+  (B) HORTONWORKS DISCLAIMS ANY AND ALL EXPRESS AND IMPLIED WARRANTIES WITH RESPECT TO THIS CODE, INCLUDING BUT NOT
+    LIMITED TO IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE;
+  (C) HORTONWORKS IS NOT LIABLE TO YOU, AND WILL NOT DEFEND, INDEMNIFY, OR HOLD YOU HARMLESS FOR ANY CLAIMS ARISING
+    FROM OR RELATED TO THE CODE; AND
+  (D) WITH RESPECT TO YOUR EXERCISE OF ANY RIGHTS GRANTED TO YOU FOR THE CODE, HORTONWORKS IS NOT LIABLE FOR ANY
+    DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES INCLUDING, BUT NOT LIMITED TO,
+    DAMAGES RELATED TO LOST REVENUE, LOST PROFITS, LOSS OF INCOME, LOSS OF BUSINESS ADVANTAGE OR UNAVAILABILITY,
+    OR LOSS OR CORRUPTION OF DATA.
+-->
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration supports_final="false" supports_adding_forbidden="true">
+  <property>
+    <name>service_name</name>
+    <display-name>Service name</display-name>
+    <description>Service name for Logsearch Portal (label)</description>
+    <value>Data Analytics Studio</value>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>component_mappings</name>
+    <display-name>Component mapping</display-name>
+    <description>Logsearch component logid mapping list (e.g.: COMPONENT1:logid1,logid2;COMPONENT2:logid3)</description>
+    <value>DATA_ANALYTICS_STUDIO_WEBAPP:data_analytics_studio_webapp,data_analytics_studio_webapp_access;DATA_ANALYTICS_STUDIO_EVENT_PROCESSOR:data_analytics_studio_event_processor,data_analytics_studio_event_processor_access</value>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>content</name>
+    <display-name>Logfeeder Config</display-name>
+    <description>Metadata jinja template for Logfeeder which contains grok patterns for reading service specific logs.</description>
+    <value>
+{
+  "input":[
+    {
+      "type":"data_analytics_studio_webapp",
+      "rowtype":"service",
+      "path":"{{default('/configurations/data_analytics_studio-env/data_analytics_studio_log_dir', '/var/log/das')}}/das-webapp.log"
+    },
+    {
+      "type": "data_analytics_studio_event_processor",
+      "rowtype":"service",
+      "path":"{{default('/configurations/data_analytics_studio-env/data_analytics_studio_log_dir', '/var/log/das')}}/event-processor.log"
+    }
+  ],
+  "filter":[
+    {
+      "filter":"grok",
+      "conditions":{
+        "fields":{
+          "type":[
+            "data_analytics_studio_webapp",
+            "data_analytics_studio_event_processor"
+          ]
+         }
+       },
+      "log4j_format":"",
+      "multiline_pattern":"^(%{LOGLEVEL:level})",
+      "message_pattern":"(?m)^%{LOGLEVEL:level}%{SPACE}\\[%{TIMESTAMP_ISO8601:logtime}\\]%{SPACE}%{JAVACLASS:logger_name}:%{SPACE}%{GREEDYDATA:log_message}",
+      "post_map_values":{
+        "logtime":{
+          "map_date":{
+            "target_date_pattern":"yyyy-MM-dd HH:mm:ss,SSS"
+          }
+         }
+       }
+     }
+   ]
+ }
+    </value>
+    <value-attributes>
+      <type>content</type>
+      <show-property-name>false</show-property-name>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+</configuration>

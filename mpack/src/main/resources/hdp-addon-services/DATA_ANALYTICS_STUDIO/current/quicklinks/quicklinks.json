@@ -1,0 +1,35 @@
+{
+  "name": "default",
+  "description": "default quick links configuration",
+  "configuration": {
+    "protocol": {
+      "type":"http",
+      "checks":[
+        {
+          "property":"data_analytics_studio_webapp_server_protocol",
+          "desired":"http",
+          "site":"data_analytics_studio-webapp-properties"
+        }
+      ]
+    },
+    "links": [
+      {
+        "name": "data_analytics_studio_ui",
+        "label": "Data Analytics Studio UI",
+        "component_name": "DATA_ANALYTICS_STUDIO_WEBAPP",
+        "url": "%@://%@:%@",
+        "requires_user_name": "false",
+        "attributes": ["authenticated", "sso"],
+        "port": {
+          "http_property": "data_analytics_studio_webapp_server_port",
+          "http_default_port": "30800",
+          "https_property": "data_analytics_studio_webapp_server_port",
+          "https_default_port": "30800",
+          "regex": "^(\\d+)$",
+          "site": "data_analytics_studio-webapp-properties"
+        }
+      }
+    ]
+  }
+}
+

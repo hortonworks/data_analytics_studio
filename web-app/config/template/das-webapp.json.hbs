@@ -1,0 +1,69 @@
+{
+    "logging": {
+        "level": "INFO",
+        "loggers": {
+            "com.hortonworks.hivestudio": "DEBUG"
+        },
+        "appenders": [
+            {
+                "type": "file",
+                "currentLogFilename": "/var/log/das/das-webapp.log",
+                "archivedLogFilenamePattern": "/var/log/das/das-webapp-%i.log.gz",
+                "archivedFileCount": 5,
+                "maxFileSize": "1GB"
+            }
+        ]
+    },
+    "jerseyClient":{
+    
+    },
+    "database": {
+        "driverClass": "org.postgresql.Driver",
+        "url": "{{jdbcUrl}}",
+        "user": "{{username}}",
+        "password": "{{password}}",
+        "properties": {
+        }
+    },
+    "flyway": {
+        "schemas": ["das"],
+        "locations": [
+            "db/migrate/common", "db/migrate/prod"
+        ]
+    },
+    "server": {
+        "requestLog": {
+            "appenders": [
+                {
+                    "type": "file",
+                    "currentLogFilename": "/var/log/das/das-webapp-access.log",
+                    "archivedLogFilenamePattern": "/var/log/das/das-webapp-access-%i.log.gz",
+                    "archivedFileCount": 5,
+                    "maxFileSize": "1GB"
+                }
+            ]
+        },
+        "applicationConnectors": [
+            {
+                "type": "http",
+                "port": {{serverPort}}
+            }
+        ]
+    },
+    "akka": {
+        "properties": {
+            "akka.loglevel": "INFO",
+            "akka.stdout-loglevel": "INFO",
+            "akka.actor.jdbc-connector-dispatcher.fork-join-executor.parallelism-factor": 5.0,
+            "akka.actor.result-dispatcher.fork-join-executor.parallelism-factor": 10.0,
+            "akka.actor.misc-dispatcher.fork-join-executor.parallelism-factor": 5.0
+        }
+    },
+    "gaConfiguration": {
+        "enabled": true,
+        "identifier": "UA-22950817-34"
+    },
+    "serviceConfigDirectory" : "/etc/das/conf/",
+    "environment": "production"
+
+}

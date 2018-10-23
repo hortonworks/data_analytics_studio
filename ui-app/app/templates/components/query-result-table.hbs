@@ -1,0 +1,133 @@
+{{!
+ *   HORTONWORKS DATAPLANE SERVICE AND ITS CONSTITUENT SERVICES
+ *
+ *   (c) 2016-2018 Hortonworks, Inc. All rights reserved.
+ *
+ *   This code is provided to you pursuant to your written agreement with Hortonworks, which may be the terms of the
+ *   Affero General Public License version 3 (AGPLv3), or pursuant to a written agreement with a third party authorized
+ *   to distribute this code.  If you do not have a written agreement with Hortonworks or with an authorized and
+ *   properly licensed third party, you do not have any rights to this code.
+ *
+ *   If this code is provided to you under the terms of the AGPLv3:
+ *   (A) HORTONWORKS PROVIDES THIS CODE TO YOU WITHOUT WARRANTIES OF ANY KIND;
+ *   (B) HORTONWORKS DISCLAIMS ANY AND ALL EXPRESS AND IMPLIED WARRANTIES WITH RESPECT TO THIS CODE, INCLUDING BUT NOT
+ *     LIMITED TO IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE;
+ *   (C) HORTONWORKS IS NOT LIABLE TO YOU, AND WILL NOT DEFEND, INDEMNIFY, OR HOLD YOU HARMLESS FOR ANY CLAIMS ARISING
+ *     FROM OR RELATED TO THE CODE; AND
+ *   (D) WITH RESPECT TO YOUR EXERCISE OF ANY RIGHTS GRANTED TO YOU FOR THE CODE, HORTONWORKS IS NOT LIABLE FOR ANY
+ *     DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES INCLUDING, BUT NOT LIMITED TO,
+ *     DAMAGES RELATED TO LOST REVENUE, LOST PROFITS, LOSS OF INCOME, LOSS OF BUSINESS ADVANTAGE OR UNAVAILABILITY,
+ *     OR LOSS OR CORRUPTION OF DATA.
+}}
+
+{{#unless isQueryRunning}}
+  {{#if currentJobData}}
+    <div class="col-md-12 query-result-table">
+      <div class="row">
+          <div class="table-status">
+              <div class="clearfix">
+                  <div class="pull-right query-action-menu">
+                    <span class="dropdown">
+                        <button class="btn btn-default dropdown-toggle actions-results" data-toggle="dropdown">Export Data </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                          <li><a href="#" {{action "openSaveHdfsModal" }} class="text-uppercase">{{fa-icon "save"}} Save To HDFS</a></li>
+                          <li><a href="#" {{action "openDownloadCsvModal" }} class="text-uppercase">{{fa-icon "download"}} Download As CSV</a></li>
+                        </ul>
+                    </span>&nbsp;
+                    {{#if showResults}}
+                        {{#unless veryLargeData}}
+                          <button class="btn btn-default" title="Previous Page" {{action "goPrevPage" payloadTitle }} disabled={{not hasPrevious}} >{{fa-icon "arrow-left"}} </button>
+                          <button class="btn btn-default" title="Next Page" {{action "goNextPage" payloadTitle}} disabled={{not hasNext}} >{{fa-icon "arrow-right"}} </button> &nbsp;
+                        {{/unless}}
+                        <button class="btn btn-default expand" title="Expand/Collspse" {{action "expandQueryResultPanel" }} >{{fa-icon "expand"}}</button>
+                    {{/if}}
+                  </div>
+              </div>
+          </div>
+          {{#if showResults}}
+              <div class="query-result">
+                  {{#unless veryLargeData}}
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          {{#each filteredColumns as |column|}}
+                            <th width="{{columnWidth}}">{{column.label}}</th>
+                          {{/each}}
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {{#each rows as |row|}}
+                        <tr>
+                          {{#each filteredColumns as |column|}}
+                              <td width="{{columnWidth}}">
+                                  {{#if isExplainPlanFormatted}}
+                                      {{pretty-print jsonObj=ExplainPlan}}
+                                  {{else}}
+                                      {{elipsiss-text row=row columnValue=column.valuePath}}
+                                  {{/if}}
+                              </td>
+                          {{/each}}
+                        </tr>
+                      {{/each}}
+                      </tbody>
+                    </table>
+                  {{/unless}}
+                  {{#if veryLargeData}}
+                    <div class='query-results-show-res'>
+                        Data size is very large. Pls export the data to view it.
+                    </div>
+                  {{/if}}
+                  {{#unless filteredColumns}}
+                    <div class='query-results-show-res'>
+                      Query completed.
+                    </div>
+                  {{/unless}}
+              </div>
+          {{else}}
+              <div class='query-results-show-res'>
+                  Query executed successfully.
+              </div>
+         {{/if}}
+      </div>
+    </div>
+  {{/if}}
+{{/unless}}
+
+{{#if showSaveHdfsModal}}
+  {{export-result
+  confirmText="OK"
+  rejectText="CLOSE"
+  label="Please enter save path and name."
+  jobId=jobId
+  labelIcon="save"
+  rejectIcon="times"
+  confirmIcon="check"
+  closable=false
+  confirmClass="success"
+  confirm="saveToHDFS"
+  reject="closeSaveHdfsModal"
+  isExportResultSuccessMessege=isExportResultSuccessMessege
+  isExportResultFailureMessege=isExportResultFailureMessege
+  }}
+{{/if}}
+
+{{#if showDownloadCsvModal}}
+  {{export-result
+  confirmText="OK"
+  rejectText="CLOSE"
+  label="Download results as CSV"
+  jobId=jobId
+  labelIcon="download"
+  rejectIcon="times"
+  confirmIcon="check"
+  closable=false
+  confirmClass="success"
+  confirm="downloadAsCsv"
+  reject="closeDownloadCsvModal"
+  isExportResultSuccessMessege=isExportResultSuccessMessege
+  isExportResultFailureMessege=isExportResultFailureMessege
+  }}
+{{/if}}
+
+{{yield}}
+

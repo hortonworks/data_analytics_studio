@@ -1,0 +1,99 @@
+{
+    "logging": {
+        "level": "INFO",
+        "loggers": {
+            "com.hortonworks.hivestudio": "DEBUG"
+        },
+        "appenders": [
+            {
+                "type": "file",
+                "currentLogFilename": "{{data_analytics_studio_log_dir}}/das-webapp.log",
+                "archivedLogFilenamePattern": "{{data_analytics_studio_log_dir}}/das-webapp-%i.log.gz",
+                "archivedFileCount": 5,
+                "maxFileSize": "1GB"
+            }
+        ]
+    },
+    "jerseyClient":{
+    
+    },
+    "database": {
+        "driverClass": "org.postgresql.Driver",
+        "url": "{{data_analytics_studio_database_jdbc_url}}",
+        "user": "{{data_analytics_studio_database_username}}",
+        "password": "{{data_analytics_studio_database_password}}",
+        "properties": {
+        }
+    },
+    "flyway": {
+        "schemas": ["das"],
+        "locations": [
+            "db/migrate/common", "db/migrate/prod"
+        ]
+    },
+    "server": {
+        "requestLog": {
+            "appenders": [
+                {
+                    "type": "file",
+                    "currentLogFilename": "{{data_analytics_studio_log_dir}}/das-webapp-access.log",
+                    "archivedLogFilenamePattern": "{{data_analytics_studio_log_dir}}/das-webapp-access-%i.log.gz",
+                    "archivedFileCount": 5,
+                    "maxFileSize": "1GB"
+                }
+            ]
+        },
+        "applicationConnectors": [
+            {
+              {% if data_analytics_studio_ssl_enabled %}
+                "keyStorePath": "{{data_analytics_studio_webapp_keystore_file}}",
+                "keyStorePassword": "{{data_analytics_studio_webapp_keystore_password}}",
+                {# "validateCerts": true, #}
+              {% endif %}
+                "type": "{{data_analytics_studio_webapp_server_protocol}}",
+                "port": {{data_analytics_studio_webapp_server_port}}
+            }
+        ],
+        "adminConnectors": [
+            {
+              {% if data_analytics_studio_ssl_enabled %}
+                "keyStorePath": "{{data_analytics_studio_webapp_keystore_file}}",
+                "keyStorePassword": "{{data_analytics_studio_webapp_keystore_password}}",
+                {# "validateCerts": true, #}
+              {% endif %}
+                "type": "{{data_analytics_studio_webapp_server_protocol}}",
+                "port": {{data_analytics_studio_webapp_admin_port}}
+            }
+        ]
+    },
+    "akka": {
+        "properties": {
+            "akka.loglevel": "INFO",
+            "akka.stdout-loglevel": "INFO",
+            "akka.actor.jdbc-connector-dispatcher.fork-join-executor.parallelism-factor": 5.0,
+            "akka.actor.result-dispatcher.fork-join-executor.parallelism-factor": 10.0,
+            "akka.actor.misc-dispatcher.fork-join-executor.parallelism-factor": 5.0
+        }
+    },
+    "gaConfiguration": {
+        "enabled": true,
+        "identifier": "UA-22950817-34"
+    },
+    "serviceConfigDirectory" : "/etc/das/conf/",
+    "environment": "production",
+    "smartsenseId": "{{data_analytics_studio_webapp_smartsense_id}}",
+    "authConfig": {
+        "enabled": {{data_analytics_studio_webapp_auth_enabled}},
+        "appUserName": "{{data_analytics_studio_user}}",
+        "adminUsers": "{{data_analytics_studio_admin_users}}",
+        "serviceAuthType": "{{data_analytics_studio_webapp_service_auth_type}}",
+        "serviceKeytab": "{{data_analytics_studio_webapp_service_keytab}}",
+        "servicePrincipal": "{{data_analytics_studio_webapp_service_principal}}",
+        "knoxSSOEnabled": {{data_analytics_studio_webapp_knox_sso_enabled}},
+        "knoxSSOUrl": "{{data_analytics_studio_webapp_knox_sso_url}}",
+        "knoxPublicKey": "{{data_analytics_studio_webapp_knox_publickey}}",
+        "knoxCookieName": "{{data_analytics_studio_webapp_knox_cookiename}}",
+        "knoxUrlParamName": "{{data_analytics_studio_webapp_knox_url_query_param}}",
+        "knoxUserAgent": "{{data_analytics_studio_webapp_knox_useragent}}"
+    }
+}

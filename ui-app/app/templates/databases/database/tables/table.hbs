@@ -1,0 +1,78 @@
+{{!
+ *   HORTONWORKS DATAPLANE SERVICE AND ITS CONSTITUENT SERVICES
+ *
+ *   (c) 2016-2018 Hortonworks, Inc. All rights reserved.
+ *
+ *   This code is provided to you pursuant to your written agreement with Hortonworks, which may be the terms of the
+ *   Affero General Public License version 3 (AGPLv3), or pursuant to a written agreement with a third party authorized
+ *   to distribute this code.  If you do not have a written agreement with Hortonworks or with an authorized and
+ *   properly licensed third party, you do not have any rights to this code.
+ *
+ *   If this code is provided to you under the terms of the AGPLv3:
+ *   (A) HORTONWORKS PROVIDES THIS CODE TO YOU WITHOUT WARRANTIES OF ANY KIND;
+ *   (B) HORTONWORKS DISCLAIMS ANY AND ALL EXPRESS AND IMPLIED WARRANTIES WITH RESPECT TO THIS CODE, INCLUDING BUT NOT
+ *     LIMITED TO IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE;
+ *   (C) HORTONWORKS IS NOT LIABLE TO YOU, AND WILL NOT DEFEND, INDEMNIFY, OR HOLD YOU HARMLESS FOR ANY CLAIMS ARISING
+ *     FROM OR RELATED TO THE CODE; AND
+ *   (D) WITH RESPECT TO YOUR EXERCISE OF ANY RIGHTS GRANTED TO YOU FOR THE CODE, HORTONWORKS IS NOT LIABLE FOR ANY
+ *     DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES INCLUDING, BUT NOT LIMITED TO,
+ *     DAMAGES RELATED TO LOST REVENUE, LOST PROFITS, LOSS OF INCOME, LOSS OF BUSINESS ADVANTAGE OR UNAVAILABILITY,
+ *     OR LOSS OR CORRUPTION OF DATA.
+}}
+
+<div class="col-md-12">
+  <div class="table-header row">
+    <p class="text-uppercase">table&nbsp;&nbsp;>&nbsp;&nbsp;{{model.table}}</p>
+    {{#if (and (not-eq dbName "information_schema") (not-eq dbName "sys"))}}
+    <div class="hv-dropdown tables-dropdown">
+      <div class="dropdown">
+        <button class="btn btn-success dropdown-toggle table-creator" type="button" data-toggle="dropdown">
+         Actions&nbsp;&nbsp;{{fa-icon "ellipsis-v"}}
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right">
+          <li>{{#link-to "databases.database.tables.table.edit" class="text-uppercase"}}{{fa-icon "edit"}} Edit{{/link-to}}</li>
+          <li>{{#link-to "databases.database.tables.table.rename" class="text-uppercase"}}{{fa-icon "edit"}} Rename{{/link-to}}</li>
+          <li><a href="#" class="text-uppercase" {{action "deleteTableWarning" }}>{{fa-icon "trash"}} Delete</a></li>
+        </ul>
+      </div>
+    </div>
+    {{/if}}
+  </div>
+  {{#if showDeleteTableModal}}
+    {{#modal-dialog
+      translucentOverlay=true
+      container-class="modal-dialog modal-sm"}}
+      <div class="modal-content">
+        <div class="modal-header text-danger">
+          <p class="modal-title">{{fa-icon "minus"}}&nbsp;&nbsp;&nbsp; Delete table</p>
+        </div>
+        <div class="modal-body text-center text-primary">
+          <p>{{deleteTableMessage}}</p>
+        </div>
+      </div><!-- /.modal-content -->
+    {{/modal-dialog}}
+  {{/if}}
+
+  {{#if showDeleteTableWarningModal}}
+    {{confirm-dialog
+    title="Confirm"
+    label="Do You want to delete the Table?"
+    titleIcon="minus"
+    labelIcon="save"
+    rejectIcon="times"
+    confirmIcon="check"
+    closable=false
+    confirmClass="success"
+    confirm="deleteTable"
+    reject="cancelDeleteTableWarning"
+    }}
+  {{/if}}
+
+  <div class="table-body">
+    {{#tabs-pane tabs=tabs queryResult=queryResult as |tab|}}
+      {{tabs-item tab=tab tabs=tabs queryResult=queryResult}}
+    {{/tabs-pane}}
+    {{outlet}}
+  </div>
+
+</div>

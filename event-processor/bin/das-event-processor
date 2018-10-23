@@ -1,0 +1,184 @@
+#!/usr/bin/env bash
+
+# description: Script to work with hive studio event processor. Enables to start/stop the server, configure it etc.
+# processname: das-event-processor
+
+set -u -e -x
+
+find_das_home() {
+  DAS_HOME="${DAS_HOME:-.}"
+  for x in $DAS_HOME /usr/das/current/data_analytics_studio /usr/das/$(ls /usr/das/ | grep -v current | tail -1)/data_analytics_studio; do
+    if test -d $x && test -d $x/bin && test -x $x/bin/das-event-processor; then
+      export DAS_HOME="`cd $x; pwd`"
+      return
+    fi
+  done
+
+  echo "Cannot infer DAS_HOME, please set DAS_HOME"
+  exit 1
+}
+
+find_das_home
+
+DAS_NAME="das"
+DAS_EP_NAME="das-event-processor"
+DAS_EP_CONF_FILENAME="das-event-processor.json"
+DAS_EP_CONF_DIR=${DAS_EP_CONF_DIR:="$DAS_HOME/conf/$DAS_EP_NAME"}
+DAS_EP_LIB_DIR="$DAS_HOME/lib"
+DAS_EP_CONF_FILE_LOC=${DAS_EP_CONF_FILE_LOC:="/etc/das/conf/${DAS_EP_CONF_FILENAME}"}
+DAS_EP_CONF_TEMPLATE_FILE_LOC="${DAS_EP_CONF_DIR}/template/${DAS_EP_CONF_FILENAME}.hbs"
+DAS_EP_ARTIFACT_VERSION_FILE_LOC="${DAS_EP_CONF_DIR}/env-version.sh"
+
+DAS_EP_PID_DIR="${DAS_EP_PID_DIR:-/var/run/${DAS_NAME}}"
+DAS_EP_PID_FILE_LOC="${DAS_EP_PID_DIR}/das-event-processor.pid"
+DAS_EP_LOG_DIR="${DAS_EP_LOG_DIR:-/var/log/${DAS_NAME}}"
+DAS_EP_OUTPUT_FILE_LOCATION="${DAS_EP_LOG_DIR}/${DAS_EP_NAME}.out"
+
+source ${DAS_EP_ARTIFACT_VERSION_FILE_LOC}
+
+DAS_EP_JAR_FILE_LOC="${DAS_EP_LIB_DIR}/data_analytics_studio-event-processor-${DAS_EP_VERSION}.jar"
+
+DAS_EP_MAIN_CLASS="com.hortonworks.hivestudio.eventProcessor.EventProcessorApplication"
+
+CLASSPATH="${DAS_EP_JAR_FILE_LOC}:${DAS_EP_LIB_DIR}/ep_libs/*:${HADOOP_CONF}"
+
+RETURN_VAL=0
+
+case "${1:-}" in
+    --version)
+        echo -e "\n"
+        echo -e "========== Hive Studio Server =========="
+        echo -e "Version: ${DAS_EP_VERSION}"
+        echo -e "Package created at: ${DAS_EP_TIMESTAMP}"
+        echo -e "JAVA home set at ${JAVA_HOME}"
+        echo -e "============================================="
+        echo -e "\n"
+        exit 0
+        ;;
+esac
+
+# check for JAVA_HOME
+if [ -z ${JAVA_HOME+x} ]
+then
+    echo "Requires Java. JAVA_HOME is not set. Please set it to continue.";
+    exit 1;
+fi
+
+JAVA=${JAVA_HOME}/bin/java;
+
+if [ -z ${JAVA_OPTS+x} ]
+then
+    JAVA_OPTS="";
+fi
+
+START_DEBUG=${DEBUG-}
+if [ "$START_DEBUG" = true ] ;
+then
+    JDWP="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"
+else
+    JDWP=""
+fi
+
+if  [[ -z "${ADDITIONAL_CLASSPATH// }" ]]
+then
+      echo "No additional classpath set."
+else
+      echo "Adding additional classpath."
+      CLASSPATH="$CLASSPATH:$ADDITIONAL_CLASSPATH"
+fi
+
+function exitIfNotSetup() {
+    if ( ! [ -f ${DAS_EP_CONF_FILE_LOC} ] )
+    then
+        echo -e "Hive studio event processor application is not setup. Run setup before starting."
+        RETURN_VAL=1
+        exit ${RETURN_VAL}
+    fi
+}
+
+function start_server() {
+    echo -e "Starting Hive Studio Event Processor Server"
+    if ( [ -f ${DAS_EP_PID_FILE_LOC} ] )
+    then
+        PID=`cat ${DAS_EP_PID_FILE_LOC}`
+        if ps -p ${PID} > /dev/null 2>&1; then
+            echo -e "Hive studio event processor is already running. PID: ${PID}\n"
+            RETURN_VAL=1
+            return
+        fi
+    fi
+
+    exitIfNotSetup
+
+    mkdir -p ${DAS_EP_LOG_DIR}
+
+    nohup ${JAVA} ${JAVA_OPTS} ${JDWP} -classpath ${CLASSPATH} ${DAS_EP_MAIN_CLASS} server ${DAS_EP_CONF_FILE_LOC} > ${DAS_EP_OUTPUT_FILE_LOCATION} 2>&1 &
+    PID=$!
+    mkdir -p ${DAS_EP_PID_DIR}
+    echo "${PID}" > ${DAS_EP_PID_FILE_LOC}
+}
+
+function stop_server() {
+    echo -e "Stopping Hive Studio Event Processor Server"
+    if ( ! [ -f ${DAS_EP_PID_FILE_LOC} ] )
+    then
+        echo -e "Hive studio event processor is not running.\n"
+        RETURN_VAL=1
+        return
+    fi
+
+    cat ${DAS_EP_PID_FILE_LOC} | xargs kill
+    rm ${DAS_EP_PID_FILE_LOC}
+}
+
+function restart_server() {
+    stop_server
+    start_server
+}
+
+function server_status() {
+    if ! [ -f ${DAS_EP_PID_FILE_LOC} ]
+    then
+        echo -e "Hive studio event processor is not running."
+    else
+        PID=`cat ${DAS_EP_PID_FILE_LOC}`
+        echo -e "Hive studio event processor is running. PID: ${PID}"
+    fi
+}
+
+function setup_server() {
+    echo -e "Setting up Hive Studio Event Processor Server"
+
+    if [ -f ${DAS_EP_CONF_FILE_LOC} ]
+    then
+        echo -e "Existing configuration found. Creating backup."
+        mv ${DAS_EP_CONF_FILE_LOC} ${DAS_EP_CONF_FILE_LOC}.bak
+    fi
+
+    ${JAVA} ${JAVA_OPTS} ${JDWP} -classpath ${CLASSPATH} ${DAS_EP_MAIN_CLASS} setup --template ${DAS_EP_CONF_TEMPLATE_FILE_LOC} --location ${DAS_EP_CONF_DIR}
+}
+
+# Options menu
+case "${1:-}" in
+    start)
+        start_server
+        ;;
+    stop)
+        stop_server
+        ;;
+    restart)
+        restart_server
+        ;;
+    status)
+        server_status
+        ;;
+    setup)
+        setup_server
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart|status|setup}"
+        RETURN_VAL=1
+esac
+
+exit ${RETURN_VAL}
+

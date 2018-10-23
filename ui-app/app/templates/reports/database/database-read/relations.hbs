@@ -1,0 +1,95 @@
+{{!
+ *   HORTONWORKS DATAPLANE SERVICE AND ITS CONSTITUENT SERVICES
+ *
+ *   (c) 2016-2018 Hortonworks, Inc. All rights reserved.
+ *
+ *   This code is provided to you pursuant to your written agreement with Hortonworks, which may be the terms of the
+ *   Affero General Public License version 3 (AGPLv3), or pursuant to a written agreement with a third party authorized
+ *   to distribute this code.  If you do not have a written agreement with Hortonworks or with an authorized and
+ *   properly licensed third party, you do not have any rights to this code.
+ *
+ *   If this code is provided to you under the terms of the AGPLv3:
+ *   (A) HORTONWORKS PROVIDES THIS CODE TO YOU WITHOUT WARRANTIES OF ANY KIND;
+ *   (B) HORTONWORKS DISCLAIMS ANY AND ALL EXPRESS AND IMPLIED WARRANTIES WITH RESPECT TO THIS CODE, INCLUDING BUT NOT
+ *     LIMITED TO IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE;
+ *   (C) HORTONWORKS IS NOT LIABLE TO YOU, AND WILL NOT DEFEND, INDEMNIFY, OR HOLD YOU HARMLESS FOR ANY CLAIMS ARISING
+ *     FROM OR RELATED TO THE CODE; AND
+ *   (D) WITH RESPECT TO YOUR EXERCISE OF ANY RIGHTS GRANTED TO YOU FOR THE CODE, HORTONWORKS IS NOT LIABLE FOR ANY
+ *     DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES INCLUDING, BUT NOT LIMITED TO,
+ *     DAMAGES RELATED TO LOST REVENUE, LOST PROFITS, LOSS OF INCOME, LOSS OF BUSINESS ADVANTAGE OR UNAVAILABILITY,
+ *     OR LOSS OR CORRUPTION OF DATA.
+}}
+{{#if noReadCount}}
+    <div class="no-table-reads">
+        <div class="table-component">
+            <div class="table" style="margin-left: auto">
+                <div id="ember1645" class="em-table show-scroll-shadow">
+                    <div class="table-mid">
+                        <h4 class="table-message">No Reports Available For Table Reads.</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{{else}}
+
+    {{#if isLoading}}
+        <div class="loading-container">{{fa-icon "spinner" spin=true size=3}}</div>
+    {{else}}
+        {{garland-layout 
+        metricsScaleHash=metricsScaleHash
+        selectedTable=selectedTableModel 
+        allTableList=allTableList
+        countTypes=countTypes
+        selectedCountType=selectedCountType 
+        updateCountTypes='updateCountTypes' 
+        showRelations='showRelations' 
+        showPathDetails='showPathDetails' }}
+    {{/if}}
+
+    {{#if showPathDetails}}
+      {{path-details
+              pathJson=pathJson
+              tableNamesHash=tableNamesHash
+              columnsNamesHash=columnsNamesHash
+              closePathSlider='closePathSlider'}}
+    {{/if}}
+
+
+    <div class="domain-range">
+      <div class="range-bar">
+        <span>
+            <i class="fa fa-square not-frequent" aria-hidden="true"></i>&nbsp; {{metricsScaleHash.metricsScaleOneLow}} to {{metricsScaleHash.metricsScaleOneHigh}}
+        </span>
+        <span>
+            <i class="fa fa-square less-frequent" aria-hidden="true"></i>&nbsp; {{metricsScaleHash.metricsScaleTwoLow}} to {{metricsScaleHash.metricsScaleTwoHigh}}
+        </span>
+        <span>
+            <i class="fa fa-square frequent" aria-hidden="true"></i>&nbsp; {{metricsScaleHash.metricsScaleThreeLow}} to {{metricsScaleHash.metricsScaleThreeHigh}}
+        </span>
+        <span>
+            <i class="fa fa-square more-frequent" aria-hidden="true"></i>&nbsp; {{metricsScaleHash.metricsScaleFourLow}} to {{metricsScaleHash.metricsScaleFourHigh}}
+        </span>
+      </div>
+      <div class="keys-bar">
+        <span>
+            <i class="fa fa-diamond" aria-hidden="true"></i>&nbsp; Primary Key
+        </span>
+        <span>
+            <i class="fa fa-cube" aria-hidden="true"></i>&nbsp; Partition Key
+        </span>
+        <span>
+            <i class="fa fa-link" aria-hidden="true"></i>&nbsp; Join Key
+        </span>
+        <span>
+            <i class="fa fa-filter" aria-hidden="true"></i>&nbsp; Filter Key
+        </span>
+        <span>
+            <i class="fa fa-sun-o" aria-hidden="true"></i>&nbsp; Aggregation
+        </span>
+      </div>
+    </div>
+
+{{/if}}
+
+

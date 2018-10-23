@@ -1,0 +1,193 @@
+{{!
+ *   HORTONWORKS DATAPLANE SERVICE AND ITS CONSTITUENT SERVICES
+ *
+ *   (c) 2016-2018 Hortonworks, Inc. All rights reserved.
+ *
+ *   This code is provided to you pursuant to your written agreement with Hortonworks, which may be the terms of the
+ *   Affero General Public License version 3 (AGPLv3), or pursuant to a written agreement with a third party authorized
+ *   to distribute this code.  If you do not have a written agreement with Hortonworks or with an authorized and
+ *   properly licensed third party, you do not have any rights to this code.
+ *
+ *   If this code is provided to you under the terms of the AGPLv3:
+ *   (A) HORTONWORKS PROVIDES THIS CODE TO YOU WITHOUT WARRANTIES OF ANY KIND;
+ *   (B) HORTONWORKS DISCLAIMS ANY AND ALL EXPRESS AND IMPLIED WARRANTIES WITH RESPECT TO THIS CODE, INCLUDING BUT NOT
+ *     LIMITED TO IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE;
+ *   (C) HORTONWORKS IS NOT LIABLE TO YOU, AND WILL NOT DEFEND, INDEMNIFY, OR HOLD YOU HARMLESS FOR ANY CLAIMS ARISING
+ *     FROM OR RELATED TO THE CODE; AND
+ *   (D) WITH RESPECT TO YOUR EXERCISE OF ANY RIGHTS GRANTED TO YOU FOR THE CODE, HORTONWORKS IS NOT LIABLE FOR ANY
+ *     DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES INCLUDING, BUT NOT LIMITED TO,
+ *     DAMAGES RELATED TO LOST REVENUE, LOST PROFITS, LOSS OF INCOME, LOSS OF BUSINESS ADVANTAGE OR UNAVAILABILITY,
+ *     OR LOSS OR CORRUPTION OF DATA.
+}}
+
+{{#if loaded}}
+
+  <!-- Vertex configuration visualization -->
+  <div class="vertex-configs-container">
+    <div class="row-container">
+      {{#if configsHash.sources.length}}
+        <div class="column-container top-column">
+          <div class="box">
+            <div class="header">Sources</div>
+            {{#each configsHash.sources as |source|}}
+              <div class="config-cell {{if (eq source configDetails) 'selected'}}"
+                {{action 'showConf' 'sources' source}}>
+                {{source.name}}
+                {{#if source.desc}}
+                  [ {{source.desc}} ]
+                {{/if}}
+                <div class="count-txt">
+                  {{#if source.configs.length}}
+                    Configurations: {{source.configs.length}}
+                  {{else}}
+                    Configuration not available!
+                  {{/if}}
+                </div>
+              </div>
+            {{/each}}
+          </div>
+          <div class="link"></div>
+        </div>
+      {{/if}}
+      {{#if configsHash.inputs.length}}
+        <div class="column-container top-column">
+          <div class="box">
+            <div class="header">Inputs</div>
+            {{#each configsHash.inputs as |input|}}
+              <div class="config-cell {{if (eq input configDetails) 'selected'}}"
+                {{action 'showConf' 'inputs' input}}>
+                {{input.desc}}
+                <div class="count-txt">
+                  {{#if input.configs.length}}
+                    Configurations: {{input.configs.length}}
+                  {{else}}
+                    Configuration not available!
+                  {{/if}}
+                </div>
+              </div>
+            {{/each}}
+          </div>
+          <div class="link"></div>
+        </div>
+      {{/if}}
+    </div>
+    <div class="processor">
+      <div class="box">
+        <div class="header">Processor</div>
+        <div class="config-cell {{if (eq configsHash.processor configDetails) 'selected'}}"
+          {{action 'showConf' 'processor' configsHash.processor}}>
+          {{configsHash.processor.desc}}
+          <div class="count-txt">
+            {{#if configsHash.processor.configs.length}}
+              Configurations: {{configsHash.processor.configs.length}}
+            {{else}}
+              Configuration not available!
+            {{/if}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row-container">
+      {{#if configsHash.sinks.length}}
+        <div class="column-container">
+          <div class="link"></div>
+          <div class="box">
+            <div class="header">Sinks</div>
+            {{#each configsHash.sinks as |sink|}}
+              <div class="config-cell {{if (eq sink configDetails) 'selected'}}"
+                {{action 'showConf' 'sinks' sink}}>
+                {{sink.name}}
+                {{#if sink.desc}}
+                  [ {{sink.desc}} ]
+                {{/if}}
+                <div class="count-txt">
+                  {{#if sink.configs.length}}
+                    Configurations: {{sink.configs.length}}
+                  {{else}}
+                    Configuration not available!
+                  {{/if}}
+                </div>
+              </div>
+            {{/each}}
+          </div>
+        </div>
+      {{/if}}
+      {{#if configsHash.outputs.length}}
+        <div class="column-container">
+          <div class="link"></div>
+          <div class="box">
+            <div class="header">Outputs</div>
+            {{#each configsHash.outputs as |output|}}
+              <div class="config-cell {{if (eq output configDetails) 'selected'}}"
+                {{action 'showConf' 'outputs' output}}>
+                {{output.desc}}
+                <div class="count-txt">
+                  {{#if output.configs.length}}
+                    Configurations: {{output.configs.length}}
+                  {{else}}
+                    Configuration not available!
+                  {{/if}}
+                </div>
+              </div>
+            {{/each}}
+          </div>
+        </div>
+      {{/if}}
+    </div>
+  </div><div class="configuration-details">
+
+    {{#if configType}}
+      <!-- Configuration details display -->
+      <table class='detail-list'>
+        <thead>
+        <tr>
+          <th colspan=2>Details</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#if configDetails.name}}
+          <tr>
+            <td>Name</td>
+            <td>{{configDetails.name}}</td>
+          </tr>
+        {{/if}}
+        {{#if configDetails.desc}}
+          <tr>
+            <td>Description</td>
+            <td>{{configDetails.desc}}</td>
+          </tr>
+        {{/if}}
+        {{#if configDetails.class}}
+          <tr>
+            <td>Class</td>
+            <td>{{configDetails.class}}</td>
+          </tr>
+        {{/if}}
+        {{#if configDetails.initializer}}
+          <tr>
+            <td>Initializer</td>
+            <td>{{configDetails.initializer}}</td>
+          </tr>
+        {{/if}}
+        </tbody>
+      </table>
+
+      <!-- Configurations display -->
+      {{em-table
+        columns=columns
+        rows=configs
+
+        rowCount=configs.length
+        definition=definition
+
+        enablePagination=false
+
+        searchAction="searchChanged"
+        sortAction="sortChanged"
+      }}
+    {{/if}}
+  </div>
+
+{{else}}
+  {{partial "loading"}}
+{{/if}}

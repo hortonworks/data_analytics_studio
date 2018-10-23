@@ -1,0 +1,183 @@
+{{!
+ *   HORTONWORKS DATAPLANE SERVICE AND ITS CONSTITUENT SERVICES
+ *
+ *   (c) 2016-2018 Hortonworks, Inc. All rights reserved.
+ *
+ *   This code is provided to you pursuant to your written agreement with Hortonworks, which may be the terms of the
+ *   Affero General Public License version 3 (AGPLv3), or pursuant to a written agreement with a third party authorized
+ *   to distribute this code.  If you do not have a written agreement with Hortonworks or with an authorized and
+ *   properly licensed third party, you do not have any rights to this code.
+ *
+ *   If this code is provided to you under the terms of the AGPLv3:
+ *   (A) HORTONWORKS PROVIDES THIS CODE TO YOU WITHOUT WARRANTIES OF ANY KIND;
+ *   (B) HORTONWORKS DISCLAIMS ANY AND ALL EXPRESS AND IMPLIED WARRANTIES WITH RESPECT TO THIS CODE, INCLUDING BUT NOT
+ *     LIMITED TO IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE;
+ *   (C) HORTONWORKS IS NOT LIABLE TO YOU, AND WILL NOT DEFEND, INDEMNIFY, OR HOLD YOU HARMLESS FOR ANY CLAIMS ARISING
+ *     FROM OR RELATED TO THE CODE; AND
+ *   (D) WITH RESPECT TO YOUR EXERCISE OF ANY RIGHTS GRANTED TO YOU FOR THE CODE, HORTONWORKS IS NOT LIABLE FOR ANY
+ *     DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES INCLUDING, BUT NOT LIMITED TO,
+ *     DAMAGES RELATED TO LOST REVENUE, LOST PROFITS, LOSS OF INCOME, LOSS OF BUSINESS ADVANTAGE OR UNAVAILABILITY,
+ *     OR LOSS OR CORRUPTION OF DATA.
+}}
+
+{{#if loaded}}
+  <table class='detail-list'>
+    <thead>
+      <tr>
+        <th colspan=2>Details</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Vertex ID</td>
+        <td>{{model.entityID}}</td>
+      </tr>
+      <tr>
+        <td>Vertex Name</td>
+        <td>{{model.name}}</td>
+      </tr>
+      <tr>
+        <td>Processor Class</td>
+        <td>{{model.processorClassName}}</td>
+      </tr>
+      <tr>
+        <td>Status</td>
+        <td>{{em-table-status-cell content=model.finalStatus}}</td>
+      </tr>
+      <tr>
+        <td>Progress</td>
+        <td>{{em-table-progress-cell content=model.progress}}</td>
+      </tr>
+      <tr>
+        <td>Start Time</td>
+        <td>{{date-formatter content=model.startTime}}</td>
+      </tr>
+      <tr>
+        <td>End Time</td>
+        <td>{{date-formatter content=model.endTime}}</td>
+      </tr>
+      <tr>
+        <td>Duration</td>
+        <td>{{txt model.duration type="duration"}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class='detail-list'>
+    <thead>
+      <tr>
+        <th colspan=2>Stats</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Total Tasks</td>
+        <td>{{txt model.totalTasks type="number"}}</td>
+      </tr>
+      <tr>
+        <td>Succeeded Tasks</td>
+        <td>{{stats-link value=model.succeededTasks routeName="vertex.tasks" statsType="SUCCEEDED"}}</td>
+      </tr>
+      <tr>
+        <td>Failed Tasks</td>
+        <td>{{stats-link value=model.failedTasks routeName="vertex.tasks" statsType="FAILED"}}</td>
+      </tr>
+      <tr>
+        <td>Killed Tasks</td>
+        <td>{{stats-link value=model.killedTasks routeName="vertex.tasks" statsType="KILLED"}}</td>
+      </tr>
+      <tr>
+        <td>First Task Start Time</td>
+        <td>
+          {{date-formatter content=model.firstTaskStartTime}}
+          {{#if firstTasksToStart}}
+            [{{em-table-linked-cell content=firstTasksToStart}}]
+          {{/if}}
+        </td>
+      </tr>
+      <tr>
+        <td>Last Task Finish Time</td>
+        <td>
+          {{date-formatter content=model.lastTaskFinishTime}}
+          {{#if lastTasksToFinish}}
+            [{{em-table-linked-cell content=lastTasksToFinish}}]
+          {{/if}}
+        </td>
+      </tr>
+      <tr>
+        <td>Average Duration</td>
+        <td>
+          {{txt model.avgDuration type="duration"}}
+        </td>
+      </tr>
+      <tr>
+        <td>Minimum Duration</td>
+        <td>
+          {{txt model.minDuration type="duration"}}
+          {{#if shortestDurationTasks}}
+            [{{em-table-linked-cell content=shortestDurationTasks}}]
+          {{/if}}
+        </td>
+      </tr>
+      <tr>
+        <td>Maximum Duration</td>
+        <td>
+          {{txt model.maxDuration type="duration"}}
+          {{#if longestDurationTasks}}
+            [{{em-table-linked-cell content=longestDurationTasks}}]
+          {{/if}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Service plugin specific details -->
+  {{#if model.servicePlugin.taskSchedulerName}}
+    <table class='detail-list'>
+      <thead>
+      <tr>
+        <th colspan=2>Service Plugin Details</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>Task Scheduler Plugin</td>
+        <td>{{txt model.servicePlugin.taskSchedulerName}} [ {{txt model.servicePlugin.taskSchedulerClassName}} ]</td>
+      </tr>
+      <tr>
+        <td>Task Communicator Plugin</td>
+        <td>{{txt model.servicePlugin.taskCommunicatorName}} [ {{txt model.servicePlugin.taskCommunicatorClassName}} ]</td>
+      </tr>
+      <tr>
+        <td>Container Launcher Plugin</td>
+        <td>{{txt model.servicePlugin.containerLauncherName}} [ {{txt model.servicePlugin.containerLauncherClassName}} ]</td>
+      </tr>
+      </tbody>
+    </table>
+  {{/if}}
+
+  {{#if model.description}}
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        Description
+      </div>
+      <div class="panel-body">
+        {{{model.description}}}
+      </div>
+    </div>
+  {{/if}}
+
+  {{#if model.diagnostics}}
+    <div class="panel panel-danger">
+      <div class="panel-heading">
+        Diagnostics
+      </div>
+      <div class="diagnostics">
+        {{{model.diagnostics}}}
+      </div>
+    </div>
+  {{/if}}
+
+{{else}}
+  {{partial "loading"}}
+{{/if}}

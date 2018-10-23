@@ -1,0 +1,49 @@
+{{!
+ *   HORTONWORKS DATAPLANE SERVICE AND ITS CONSTITUENT SERVICES
+ *
+ *   (c) 2016-2018 Hortonworks, Inc. All rights reserved.
+ *
+ *   This code is provided to you pursuant to your written agreement with Hortonworks, which may be the terms of the
+ *   Affero General Public License version 3 (AGPLv3), or pursuant to a written agreement with a third party authorized
+ *   to distribute this code.  If you do not have a written agreement with Hortonworks or with an authorized and
+ *   properly licensed third party, you do not have any rights to this code.
+ *
+ *   If this code is provided to you under the terms of the AGPLv3:
+ *   (A) HORTONWORKS PROVIDES THIS CODE TO YOU WITHOUT WARRANTIES OF ANY KIND;
+ *   (B) HORTONWORKS DISCLAIMS ANY AND ALL EXPRESS AND IMPLIED WARRANTIES WITH RESPECT TO THIS CODE, INCLUDING BUT NOT
+ *     LIMITED TO IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE;
+ *   (C) HORTONWORKS IS NOT LIABLE TO YOU, AND WILL NOT DEFEND, INDEMNIFY, OR HOLD YOU HARMLESS FOR ANY CLAIMS ARISING
+ *     FROM OR RELATED TO THE CODE; AND
+ *   (D) WITH RESPECT TO YOUR EXERCISE OF ANY RIGHTS GRANTED TO YOU FOR THE CODE, HORTONWORKS IS NOT LIABLE FOR ANY
+ *     DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES INCLUDING, BUT NOT LIMITED TO,
+ *     DAMAGES RELATED TO LOST REVENUE, LOST PROFITS, LOSS OF INCOME, LOSS OF BUSINESS ADVANTAGE OR UNAVAILABILITY,
+ *     OR LOSS OR CORRUPTION OF DATA.
+}}
+
+<div class="ide-style col-md-12">
+  <div class="row">
+    <div class="worksheet-container col-lg-10 col-md-9 col-sm-8 col-xs-12">
+      <ul class="worksheet-nav row nav nav-tabs inverse">
+        {{#each worksheets as |worksheet index| }}
+          <li class="{{if worksheet.selected 'active'}}" >
+            {{#link-to 'queries.query' worksheet.id  classBinding='worksheet.selected:active' }}
+              <span class="worksheet-name">{{ worksheet.title }}</span>
+              {{#if worksheet.isQueryDirty}}*{{/if}}
+              {{#if (and (gt worksheets.length 1) (not-eq worksheet.id "saved"))}}
+                <span class="closeTab" {{action "confirmWorksheetClose" index worksheet.id bubbles=false }}>{{fa-icon "times"}}</span>
+                {{else}}
+                <span class="saved-query-tab-icon">{{fa-icon "caret-down"}}</span>
+              {{/if}}
+            {{/link-to}}
+          </li>
+        {{/each}}
+        <li>
+          <span class=" new-worksheet" title="New Worksheet" {{action "createNewWorksheet" }}>{{fa-icon "plus"}}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    {{outlet}}
+  </div>
+</div>

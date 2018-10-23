@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<!--
+  HORTONWORKS DATAPLANE SERVICE AND ITS CONSTITUENT SERVICES
+
+  (c) 2016-2018 Hortonworks, Inc. All rights reserved.
+
+  This code is provided to you pursuant to your written agreement with Hortonworks, which may be the terms of the
+  Affero General Public License version 3 (AGPLv3), or pursuant to a written agreement with a third party authorized
+  to distribute this code.  If you do not have a written agreement with Hortonworks or with an authorized and
+  properly licensed third party, you do not have any rights to this code.
+
+  If this code is provided to you under the terms of the AGPLv3:
+  (A) HORTONWORKS PROVIDES THIS CODE TO YOU WITHOUT WARRANTIES OF ANY KIND;
+  (B) HORTONWORKS DISCLAIMS ANY AND ALL EXPRESS AND IMPLIED WARRANTIES WITH RESPECT TO THIS CODE, INCLUDING BUT NOT
+    LIMITED TO IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE;
+  (C) HORTONWORKS IS NOT LIABLE TO YOU, AND WILL NOT DEFEND, INDEMNIFY, OR HOLD YOU HARMLESS FOR ANY CLAIMS ARISING
+    FROM OR RELATED TO THE CODE; AND
+  (D) WITH RESPECT TO YOUR EXERCISE OF ANY RIGHTS GRANTED TO YOU FOR THE CODE, HORTONWORKS IS NOT LIABLE FOR ANY
+    DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES INCLUDING, BUT NOT LIMITED TO,
+    DAMAGES RELATED TO LOST REVENUE, LOST PROFITS, LOSS OF INCOME, LOSS OF BUSINESS ADVANTAGE OR UNAVAILABILITY,
+    OR LOSS OR CORRUPTION OF DATA.
+-->
+<metainfo>
+  <schemaVersion>2.0</schemaVersion>
+  <services>
+    <service>
+      <name>DATA_ANALYTICS_STUDIO</name>
+      <displayName>Data Analytics Studio</displayName>
+      <comment>Data Analytics Studio is the one stop shop for Apache Hive warehousing. Query, optimize and administrate your data with this powerful interface.</comment>
+      <version>${das_version}.0.0</version>
+      <credential-store>
+        <supported>true</supported>
+        <enabled>true</enabled>
+      </credential-store>
+      <sso>
+        <supported>true</supported>
+        <enabledConfiguration>data_analytics_studio-security-site/knox_sso_enabled</enabledConfiguration>
+      </sso>
+      <components>
+
+        <component>
+          <name>DATA_ANALYTICS_STUDIO_WEBAPP</name>
+          <displayName>Data Analytics Studio Webapp</displayName>
+          <category>MASTER</category>
+          <cardinality>1</cardinality>
+          <versionAdvertised>false</versionAdvertised>
+          <reassignAllowed>true</reassignAllowed>
+          <clientsToUpdateConfigs></clientsToUpdateConfigs>
+          <commandScript>
+            <script>scripts/data_analytics_studio_webapp.py</script>
+            <scriptType>PYTHON</scriptType>
+            <timeout>1200</timeout>
+          </commandScript>
+          <logs>
+            <log>
+              <logId>data_analytics_studio_webapp</logId>
+              <primary>true</primary>
+            </log>
+          </logs>
+          <configuration-dependencies>
+            <config-type>data_analytics_studio-properties</config-type>
+            <config-type>data_analytics_studio-database</config-type>
+            <config-type>data_analytics_studio-env</config-type>
+            <config-type>data_analytics_studio-webapp-env</config-type>
+            <config-type>data_analytics_studio-webapp-properties</config-type>
+            <config-type>data_analytics_studio-security-site</config-type>
+          </configuration-dependencies>
+        </component>
+
+        <component>
+          <name>DATA_ANALYTICS_STUDIO_EVENT_PROCESSOR</name>
+          <displayName>Data Analytics Studio Event Processor</displayName>
+          <category>MASTER</category>
+          <cardinality>1</cardinality>
+          <versionAdvertised>false</versionAdvertised>
+          <reassignAllowed>true</reassignAllowed>
+          <commandScript>
+            <script>scripts/data_analytics_studio_event_processor.py</script>
+            <scriptType>PYTHON</scriptType>
+          </commandScript>
+          <logs>
+            <log>
+              <logId>data_analytics_studio_event_processor</logId>
+              <primary>true</primary>
+            </log>
+          </logs>
+          <configuration-dependencies>
+            <config-type>data_analytics_studio-properties</config-type>
+            <config-type>data_analytics_studio-database</config-type>
+            <config-type>data_analytics_studio-env</config-type>
+            <config-type>data_analytics_studio-event_processor-env</config-type>
+            <config-type>data_analytics_studio-event_processor-properties</config-type>
+            <config-type>data_analytics_studio-security-site</config-type>
+          </configuration-dependencies>
+        </component>
+
+      </components>
+
+      <osSpecifics>
+        <osSpecific>
+          <osFamily>redhat7,amazon2015,redhat6,suse11,suse12</osFamily>
+          <packages>
+            <package>
+              <name>${das_package_name}</name>
+            </package>
+          </packages>
+        </osSpecific>
+        <osSpecific>
+          <osFamily>debian7,debian9,ubuntu12,ubuntu14,ubuntu16</osFamily>
+          <packages>
+            <package>
+              <name>${das_package_name}</name>
+            </package>
+          </packages>
+        </osSpecific>
+      </osSpecifics>
+
+<!--       <commandScript>
+        <script>scripts/service_check.py</script>
+        <scriptType>PYTHON</scriptType>
+        <timeout>300</timeout>
+      </commandScript> -->
+
+<!--      <themes>
+        <theme>
+          <fileName>theme.json</fileName>
+          <default>true</default>
+        </theme>
+      </themes> -->
+
+      <quickLinksConfigurations>
+        <quickLinksConfiguration>
+          <fileName>quicklinks.json</fileName>
+          <default>true</default>
+        </quickLinksConfiguration>
+      </quickLinksConfigurations>
+
+      <requiredServices>
+        <service>HIVE</service>
+      </requiredServices>
+
+      <configuration-dependencies>
+      </configuration-dependencies>
+    </service>
+  </services>
+</metainfo>

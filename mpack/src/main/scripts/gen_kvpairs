@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [ $# -lt 3 ]; then
+  echo "Usage: $0 <file> key1 value1 ... keyn valuen"
+  exit 1
+fi
+
+FILE=$1; shift
+mkdir $(dirname $FILE)
+
+exec 1>$FILE
+while [ $# -gt 1 ] ; do
+  echo "$1=$2"
+  shift
+  shift
+done

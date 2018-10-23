@@ -1,0 +1,86 @@
+{{!
+ *   HORTONWORKS DATAPLANE SERVICE AND ITS CONSTITUENT SERVICES
+ *
+ *   (c) 2016-2018 Hortonworks, Inc. All rights reserved.
+ *
+ *   This code is provided to you pursuant to your written agreement with Hortonworks, which may be the terms of the
+ *   Affero General Public License version 3 (AGPLv3), or pursuant to a written agreement with a third party authorized
+ *   to distribute this code.  If you do not have a written agreement with Hortonworks or with an authorized and
+ *   properly licensed third party, you do not have any rights to this code.
+ *
+ *   If this code is provided to you under the terms of the AGPLv3:
+ *   (A) HORTONWORKS PROVIDES THIS CODE TO YOU WITHOUT WARRANTIES OF ANY KIND;
+ *   (B) HORTONWORKS DISCLAIMS ANY AND ALL EXPRESS AND IMPLIED WARRANTIES WITH RESPECT TO THIS CODE, INCLUDING BUT NOT
+ *     LIMITED TO IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE;
+ *   (C) HORTONWORKS IS NOT LIABLE TO YOU, AND WILL NOT DEFEND, INDEMNIFY, OR HOLD YOU HARMLESS FOR ANY CLAIMS ARISING
+ *     FROM OR RELATED TO THE CODE; AND
+ *   (D) WITH RESPECT TO YOUR EXERCISE OF ANY RIGHTS GRANTED TO YOU FOR THE CODE, HORTONWORKS IS NOT LIABLE FOR ANY
+ *     DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES INCLUDING, BUT NOT LIMITED TO,
+ *     DAMAGES RELATED TO LOST REVENUE, LOST PROFITS, LOSS OF INCOME, LOSS OF BUSINESS ADVANTAGE OR UNAVAILABILITY,
+ *     OR LOSS OR CORRUPTION OF DATA.
+}}
+
+<div class="col-md-12 manager-database-panel">
+    <span class="database-explorer">Database Explorer</span>
+    <div class="col-md-12 update-info">
+        <label class="table-header">LAST UPDATE: </label>
+        <span class="table-text">{{timeSinceLastUpdate}} sec ago</span>
+    </div>
+    <div class="row">
+        {{#power-select
+                selectedDb = selectedDb
+                class="multiple-db-select"
+                placeholder="Search databases"
+                options=filteredDatabases
+                selected=selectedDb
+                searchField="name"
+                onchange=(pipe-action (action (mut selectedDbObj))  (action "databaseClicked"))
+        as |number|}} {{number.name}}
+        {{/power-select}}
+    </div>
+</div>
+
+<div class="col-md-12 database-labels hide">
+  <p class="text-left text-uppercase"><strong>{{heading}}</strong></p>
+</div>
+
+
+
+<div class="col-md-10 hide">
+      <div class="input-group">
+        {{#unless extendDrawer }}
+          {{input type="text" class="form-control display" value=selectedDb}}
+        {{else}}
+          {{input type="text" class="form-control search" value=filterText placeholder="Search Databases" focus-out="focusOut" bubbles=false}}
+        {{/unless}}
+
+        {{#if enableSecondaryAction}}
+          <div class="input-group-btn">
+            <button type="button" class="btn btn-default {{if extendDrawer 'active'}}" {{action 'secondaryActionClicked'}}>{{fa-icon secondaryActionFaIcon}} {{secondaryActionText}} <span class="caret"></span></button>
+          </div>
+        {{/if}}
+      </div>
+
+
+  {{#if extendDrawer }}
+    <div class="database-search-drawer">
+      <div class="list-group">
+        {{#each filteredDatabases as |database|}}
+            <a {{action "databaseClicked" database}} class="list-group-item {{if database.selected 'selected'}}">
+              {{#if database.selected}}
+                <div class="pull-right">
+                  {{fa-icon "check" }}
+                </div>
+              {{/if}}
+
+              &nbsp;&nbsp;
+              {{fa-icon "database" }}&nbsp;&nbsp;{{database.name}}
+            </a>
+        {{/each}}
+      </div>
+
+    </div>
+  {{/if}}
+</div>
+
+{{yield}}

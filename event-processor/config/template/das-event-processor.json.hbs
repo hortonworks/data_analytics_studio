@@ -1,0 +1,77 @@
+{
+  "logging": {
+    "level": "INFO",
+    "loggers": {
+      "com.hortonworks.hivestudio": "DEBUG"
+    },
+    "appenders": [
+      {
+        "type": "file",
+        "currentLogFilename": "/var/log/das/event-processor.log",
+        "archivedLogFilenamePattern": "/var/log/das/event-processor-%i.log.gz",
+        "archivedFileCount": 5,
+        "maxFileSize": "1GB"
+      }
+    ]
+  },
+  "jerseyClient": {
+    timeout: 240s,
+    connectionTimeout: 2s
+  },
+  "database": {
+    "driverClass": "org.postgresql.Driver",
+    "url": "{{jdbcUrl}}",
+    "user": "{{username}}",
+    "password": "{{password}}",
+    "properties": {
+    }
+  },
+  "server": {
+    "requestLog": {
+      "appenders": [
+        {
+          "type": "file",
+          "currentLogFilename": "/var/log/das/event-processor-access.log",
+          "archivedLogFilenamePattern": "/var/log/das/event-processor-access-%i.log.gz",
+          "archivedFileCount": 5,
+          "maxFileSize": "1GB"
+        }
+      ]
+    },
+    "applicationConnectors": [
+      {
+        "type": "http",
+        "port": {{serverPort}}
+      }
+    ],
+    "adminConnectors": [
+      {
+        "type": "http",
+        "port": {{adminServerPort}}
+      }
+    ]
+  },
+  "akka": {
+    "properties": {
+      "akka.loglevel": "INFO",
+      "akka.stdout-loglevel": "INFO",
+      "akka.loggers.0": "akka.event.slf4j.Slf4jLogger"
+    }
+  },
+  "event-processing": {
+    "meta.info.sync.service.delay.millis" : 5000,
+    "actor.initialization.delay.millis": 20000,
+    "close.folder.delay.millis": 600000,
+    "reread.event.max.retries": -1,
+    "reporting.scheduler.initial.delay.millis": 30000,
+    "reporting.scheduler.interval.delay.millis": 300000,
+    "reporting.scheduler.weekly.initial.delay.millis": 60000,
+    "reporting.scheduler.weekly.interval.delay.millis": 600000,
+    "reporting.scheduler.monthly.initial.delay.millis": 90000,
+    "reporting.scheduler.monthly.interval.delay.millis": 900000,
+    "reporting.scheduler.quarterly.initial.delay.millis": 120000,
+    "reporting.scheduler.quarterly.interval.delay.millis": 1200000
+  },
+  "serviceConfigDirectory": "/etc/das/conf/",
+  "environment": "production"
+}

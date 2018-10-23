@@ -1,0 +1,75 @@
+{{!
+ *   HORTONWORKS DATAPLANE SERVICE AND ITS CONSTITUENT SERVICES
+ *
+ *   (c) 2016-2018 Hortonworks, Inc. All rights reserved.
+ *
+ *   This code is provided to you pursuant to your written agreement with Hortonworks, which may be the terms of the
+ *   Affero General Public License version 3 (AGPLv3), or pursuant to a written agreement with a third party authorized
+ *   to distribute this code.  If you do not have a written agreement with Hortonworks or with an authorized and
+ *   properly licensed third party, you do not have any rights to this code.
+ *
+ *   If this code is provided to you under the terms of the AGPLv3:
+ *   (A) HORTONWORKS PROVIDES THIS CODE TO YOU WITHOUT WARRANTIES OF ANY KIND;
+ *   (B) HORTONWORKS DISCLAIMS ANY AND ALL EXPRESS AND IMPLIED WARRANTIES WITH RESPECT TO THIS CODE, INCLUDING BUT NOT
+ *     LIMITED TO IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE;
+ *   (C) HORTONWORKS IS NOT LIABLE TO YOU, AND WILL NOT DEFEND, INDEMNIFY, OR HOLD YOU HARMLESS FOR ANY CLAIMS ARISING
+ *     FROM OR RELATED TO THE CODE; AND
+ *   (D) WITH RESPECT TO YOUR EXERCISE OF ANY RIGHTS GRANTED TO YOU FOR THE CODE, HORTONWORKS IS NOT LIABLE FOR ANY
+ *     DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES INCLUDING, BUT NOT LIMITED TO,
+ *     DAMAGES RELATED TO LOST REVENUE, LOST PROFITS, LOSS OF INCOME, LOSS OF BUSINESS ADVANTAGE OR UNAVAILABILITY,
+ *     OR LOSS OR CORRUPTION OF DATA.
+}}
+<div id="db_accordion_expand" {{action "toggleDbPanel"}} class="hide">{{fa-icon "angle-double-right db-exp"}}</div>
+
+<div class="database-panel db-menu query-editor-db">
+    <div class="database-container">
+            <div class="panel-group database-panel" id="db_accordion" role="tablist">
+                {{#each selectedTablesModels as |tableModel|}}
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id={{concat 'db_heading_' tableModel.dbname}}>
+                            <div class="panel-title">
+                                <div class="form-group">
+                                    <span{{action "toggleDbPanel"}}>{{fa-icon "angle-double-left pull-right db-exp"}}</span>
+                                    <!--<label for="sel3" class="database-explorer">Database Explorer</label>-->
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-12 update-info">
+                                                <label class="table-header">LAST UPDATE: </label>
+                                                <span class="table-text">{{timeSinceLastUpdate}} sec ago</span>
+                                            </div>
+                                            <div class="input-group-lg">
+                                                {{#power-select
+                                                        selectedDb = selectedDb
+                                                        class="multiple-db-select"
+                                                        placeholder="Search databases"
+                                                        options=sortedDatabases
+                                                        selected=selectedDbObj
+                                                        searchField="name"
+                                                        onchange=(pipe-action (action (mut selectedDbObj)) (action "updateTables"))
+                                                as |number|}} {{number.name}}
+                                                {{/power-select}}
+                                            </div>
+                                        </div>
+                                        <label class="table-header"> TABLES</label>
+                                    {{#if  (not-eq tableNames.facetedFields.length 0)}}
+                                        <div class="row search-bar search-composer">
+                                            {{input value=filterText class="search-query" placeholder="Search Tables"}}
+                                        </div>
+                                    {{/if}}
+                                    </div>
+                                </div>
+                                {{em-table-facet-panel tableDefinition=tableDefinition dataProcessor=filteredFacets tableData = data toggleValuesDisplayAction="toggleFacets"}}
+                            </div>
+                            {{#if loading}}
+                                <h4 class="facets-status">{{fa-icon "spinner fa-1-5 middle-align" spin=true}}</h4>
+                            {{else}}
+                                {{#unless tableNames.facetedFields.length}}
+                                <h4 class="facets-status">No tables found</h4>
+                                {{/unless}}
+                            {{/if}}
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
+    </div>
+</div>
