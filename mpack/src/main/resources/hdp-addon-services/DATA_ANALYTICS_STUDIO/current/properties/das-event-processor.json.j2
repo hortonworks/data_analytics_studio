@@ -1,0 +1,96 @@
+{
+    "logging": {
+        "level": "INFO",
+        "loggers": {
+            "com.hortonworks.hivestudio": "DEBUG"
+        },
+        "appenders": [
+            {
+                "type": "file",
+                "currentLogFilename": "{{data_analytics_studio_log_dir}}/event-processor.log",
+                "archivedLogFilenamePattern": "{{data_analytics_studio_log_dir}}/event-processor-%i.log.gz",
+                "archivedFileCount": 5,
+                "maxFileSize": "1GB"
+            }
+        ]
+    },
+    "jerseyClient": {
+      "timeout": "240s",
+      "connectionTimeout": "2s"
+    },
+    "database": {
+        "driverClass": "org.postgresql.Driver",
+        "url": "{{data_analytics_studio_database_jdbc_url}}",
+        "user": "{{data_analytics_studio_database_username}}",
+        "password": "{{data_analytics_studio_database_password}}",
+        "properties": {
+        }
+    },
+    "server": {
+        "requestLog": {
+            "appenders": [
+                {
+                    "type": "file",
+                    "currentLogFilename": "{{data_analytics_studio_log_dir}}/event-processor-access.log",
+                    "archivedLogFilenamePattern": "{{data_analytics_studio_log_dir}}/event-processor-access-%i.log.gz",
+                    "archivedFileCount": 5,
+                    "maxFileSize": "1GB"
+                }
+            ]
+        },
+        "applicationConnectors": [
+            {
+              {% if data_analytics_studio_ssl_enabled %}
+                "keyStorePath": "{{data_analytics_studio_event_processor_keystore_file}}",
+                "keyStorePassword": "{{data_analytics_studio_event_processor_keystore_password}}",
+                {# "validateCerts": true, #}
+              {% endif %}
+                "type": "{{data_analytics_studio_event_processor_server_protocol}}",
+                "port": {{data_analytics_studio_event_processor_server_port}}
+            }
+        ],
+        "adminConnectors": [
+            {
+              {% if data_analytics_studio_ssl_enabled %}
+                "keyStorePath": "{{data_analytics_studio_event_processor_keystore_file}}",
+                "keyStorePassword": "{{data_analytics_studio_event_processor_keystore_password}}",
+                {# "validateCerts": true, #}
+              {% endif %}
+                "type": "{{data_analytics_studio_event_processor_server_protocol}}",
+                "port": {{data_analytics_studio_event_processor_admin_server_port}}
+            }
+        ]
+    },
+    "akka": {
+        "properties": {
+            "akka.loglevel": "INFO",
+            "akka.stdout-loglevel": "INFO",
+            "akka.loggers.0": "akka.event.slf4j.Slf4jLogger"
+        }
+    },
+    "authConfig": {
+        "enabled": {{data_analytics_studio_event_processor_auth_enabled}},
+        "appUserName": "{{data_analytics_studio_user}}",
+        "serviceAuthType": "{{data_analytics_studio_event_processor_service_auth_type}}",
+        "serviceKeytab": "{{data_analytics_studio_event_processor_service_keytab}}",
+        "servicePrincipal": "{{data_analytics_studio_event_processor_service_principal}}"
+    },
+    "event-processing": {
+        "hive.hook.proto.base-directory": "{{data_analytics_studio_event_processor_hive_base_dir}}",
+        "tez.history.logging.proto-base-dir": "{{data_analytics_studio_event_processor_tez_base_dir}}",
+        "meta.info.sync.service.delay.millis": 5000,
+        "actor.initialization.delay.millis": 20000,
+        "close.folder.delay.millis": 600000,
+        "reread.event.max.retries": -1,
+        "reporting.scheduler.initial.delay.millis": 30000,
+        "reporting.scheduler.interval.delay.millis": 300000,
+        "reporting.scheduler.weekly.initial.delay.millis": 60000,
+        "reporting.scheduler.weekly.interval.delay.millis": 600000,
+        "reporting.scheduler.monthly.initial.delay.millis": 90000,
+        "reporting.scheduler.monthly.interval.delay.millis": 900000,
+        "reporting.scheduler.quarterly.initial.delay.millis": 120000,
+        "reporting.scheduler.quarterly.interval.delay.millis": 1200000
+    },
+    "serviceConfigDirectory": "/etc/das/conf/",
+    "environment": "production"
+}

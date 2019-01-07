@@ -1,0 +1,76 @@
+{{!
+ *   HORTONWORKS DATAPLANE SERVICE AND ITS CONSTITUENT SERVICES
+ *
+ *   (c) 2016-2018 Hortonworks, Inc. All rights reserved.
+ *
+ *   This code is provided to you pursuant to your written agreement with Hortonworks, which may be the terms of the
+ *   Affero General Public License version 3 (AGPLv3), or pursuant to a written agreement with a third party authorized
+ *   to distribute this code.  If you do not have a written agreement with Hortonworks or with an authorized and
+ *   properly licensed third party, you do not have any rights to this code.
+ *
+ *   If this code is provided to you under the terms of the AGPLv3:
+ *   (A) HORTONWORKS PROVIDES THIS CODE TO YOU WITHOUT WARRANTIES OF ANY KIND;
+ *   (B) HORTONWORKS DISCLAIMS ANY AND ALL EXPRESS AND IMPLIED WARRANTIES WITH RESPECT TO THIS CODE, INCLUDING BUT NOT
+ *     LIMITED TO IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE;
+ *   (C) HORTONWORKS IS NOT LIABLE TO YOU, AND WILL NOT DEFEND, INDEMNIFY, OR HOLD YOU HARMLESS FOR ANY CLAIMS ARISING
+ *     FROM OR RELATED TO THE CODE; AND
+ *   (D) WITH RESPECT TO YOUR EXERCISE OF ANY RIGHTS GRANTED TO YOU FOR THE CODE, HORTONWORKS IS NOT LIABLE FOR ANY
+ *     DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES INCLUDING, BUT NOT LIMITED TO,
+ *     DAMAGES RELATED TO LOST REVENUE, LOST PROFITS, LOSS OF INCOME, LOSS OF BUSINESS ADVANTAGE OR UNAVAILABILITY,
+ *     OR LOSS OR CORRUPTION OF DATA.
+}}
+
+<div class="table-body">
+  {{csv-format-params fileFormatInfo=fileFormatInfo}}
+</div>
+
+<div class="table-body">
+  {{upload-table-source onFileChanged='onFileChanged' fileInfo=fileInfo}}
+</div>
+
+{{#if isUploadError}}
+ {{error-notification message="There is some problem while uploading table" classNames="hs-error hs-detail-error" error=errorTrace}}
+{{/if}}
+<div class="create-table-controls">
+  <button class="btn btn-success" {{action
+  "preview"}}>{{fa-icon "eye"}} Preview</button>
+</div>
+<br />
+<div class="table-body">
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <div class="panel-title">
+        <button class="btn btn-circle {{if showPreview 'active'}}" {{action
+        "toggleShowPreview"}}>
+        {{fa-icon (if showPreview "minus" "plus")}}
+        </button>
+        &nbsp;&nbsp;&nbsp;Table Preview
+      </div>
+    </div>
+  <div class="query-result">
+    {{#unless previewOutOfBound}}
+      {{#if showPreview}}
+      {{simple-table header=columns rows=rows }}
+      {{else}}
+        <br />
+        <p>No Preview Available.</p>
+      {{/if}}
+    {{else}}
+        <br />
+        <p class="error">Data is too large to upload.</p>
+    {{/unless}}
+
+  </div>
+  </div>
+</div>
+
+<div class="col-md-12 table-info">
+  <div class="table-body">
+    {{create-table tabs=tabs
+    cancel="cancel"
+    create="createAndUpload" columns=columns tableName=tableName options=options}}
+    <br />
+  </div>
+</div>
+
+{{yield}}

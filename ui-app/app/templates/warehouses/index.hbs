@@ -1,0 +1,153 @@
+{{!
+ *   HORTONWORKS DATAPLANE SERVICE AND ITS CONSTITUENT SERVICES
+ *
+ *   (c) 2016-2018 Hortonworks, Inc. All rights reserved.
+ *
+ *   This code is provided to you pursuant to your written agreement with Hortonworks, which may be the terms of the
+ *   Affero General Public License version 3 (AGPLv3), or pursuant to a written agreement with a third party authorized
+ *   to distribute this code.  If you do not have a written agreement with Hortonworks or with an authorized and
+ *   properly licensed third party, you do not have any rights to this code.
+ *
+ *   If this code is provided to you under the terms of the AGPLv3:
+ *   (A) HORTONWORKS PROVIDES THIS CODE TO YOU WITHOUT WARRANTIES OF ANY KIND;
+ *   (B) HORTONWORKS DISCLAIMS ANY AND ALL EXPRESS AND IMPLIED WARRANTIES WITH RESPECT TO THIS CODE, INCLUDING BUT NOT
+ *     LIMITED TO IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE;
+ *   (C) HORTONWORKS IS NOT LIABLE TO YOU, AND WILL NOT DEFEND, INDEMNIFY, OR HOLD YOU HARMLESS FOR ANY CLAIMS ARISING
+ *     FROM OR RELATED TO THE CODE; AND
+ *   (D) WITH RESPECT TO YOUR EXERCISE OF ANY RIGHTS GRANTED TO YOU FOR THE CODE, HORTONWORKS IS NOT LIABLE FOR ANY
+ *     DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES INCLUDING, BUT NOT LIMITED TO,
+ *     DAMAGES RELATED TO LOST REVENUE, LOST PROFITS, LOSS OF INCOME, LOSS OF BUSINESS ADVANTAGE OR UNAVAILABILITY,
+ *     OR LOSS OR CORRUPTION OF DATA.
+}}
+<div class="warehouses-page">
+  {{warehouse-map warehouses=warehouses}}
+  <div class="items-container">
+    <div class="items-header">
+      {{#link-to "warehouses.create"}}
+        <button type="button" class="btn btn-sm btn-success">Create</button>
+      {{/link-to}}
+    </div>
+    <div class="items-list">
+      {{#each warehouses as |warehouse|}}
+        <div class="warehouse-item">
+          <div class="title">{{warehouse.name}}</div>
+          <div class="location">{{warehouse.location}}</div>
+          <div class="description">{{warehouse.description}}</div>
+          <div class="stats">
+            <div class="db">DATABASES <div class="counts">{{warehouse.dbCount}}</div></div>
+            <div class="instance">INSTANCES
+              <div class="counts">{{warehouse.instanceCount}}</div>
+              <i class="fa fa-plus-circle create-icon" {{action "showAttachInstance" warehouse}}></i>
+            </div>
+            <div class="capacity">STORAGE <div class="counts">{{warehouse.capacity}}<span class="sup">TB</span></div></div>
+          </div>
+          <i class="fa fa-trash-o" {{action "deleteWarehouse" warehouse}}></i>
+          <div></div>
+        </div>
+      {{/each}}
+      {{#link-to "warehouses.create"}}
+        <div class="add-warehouse-item">
+          <i class="fa fa-plus" aria-hidden="true"></i>
+        </div>
+      {{/link-to}}
+    </div>
+  </div>
+
+  {{#if showAttachInstance}}
+    {{#modal-dialog translucentOverlay=true clickOutsideToClose=true container-class="modal-dialog"}}
+      <form class="panel manage-query-service-instance-modal">
+        <h4>Manage Query Service Instances</h4>
+        <i class="fa fa-times" {{action "setProperties" "showAttachInstance" false}}></i>
+
+        {{#each instances as |instance|}}
+          <div class="gbackround {{instance.bgClass}}">
+            <div class="highlight">
+            </div>
+            <div class="textblock">
+              <div class="textitle">{{instance.size}}  - UP TIME</div>
+              <div class="text">{{instance.upTime}} hours</div>
+            </div>
+            <div class="textblock">
+              <div class="textitle">UTILIZATION</div>
+              <div class="text">{{instance.utilization}}%</div>
+            </div>
+            <div class="textblock">
+              <div class="textitle">CURRENT USERS</div>
+              <div class="text">{{instance.currentUserCount}}</div>
+            </div>
+            <div class="connectbutton" {{action "connectInstance" instance}}>
+              Connect →
+            </div>
+          </div>
+        {{/each}}
+
+        <div class="instancebox">
+          <div class="instancetextblock">
+            <div class="instancetextitle">Expand your current query execution capacity</div>
+            <div class="instancetext">New instance</div>
+          </div>
+          <div class="createbutton" {{action "setProperties" "showAttachInstance" false "showCreateInstance" true}}>Create +</div>
+          <div class="instanceboxhighlight"></div>
+        </div>
+      </form>
+
+    {{/modal-dialog}}
+  {{/if}}
+
+  {{#if showCreateInstance}}
+    {{#modal-dialog translucentOverlay=true clickOutsideToClose=true container-class="modal-dialog"}}
+      <form class="panel create-instance-modal">
+        <h4>Add Query Service Instance</h4>
+        <i class="fa fa-times" {{action "setProperties" "showCreateInstance" false}}></i>
+
+        <div class="form-group">
+          <label>Instance Name</label>
+          {{input class="form-control" value=data.newInstanceName}}
+        </div>
+
+        <div class="form-group">
+          <label>Warehouse</label>
+          <select class="form-control" onchange={{action (mut data.newInstanceWarehouse) value="target.value"}}>
+            {{#each warehouses as |warehouse|}}
+              <option value={{warehouse.name}} selected={{eq data.newInstanceWarehouse warehouse.name}}>{{warehouse.name}}</option>
+            {{/each}}
+          </select>
+        </div>
+
+        <h5 class="text-center">Select Instance Size</h5>
+
+        <div class="text-center">
+          {{#each instanceTemplates as |template|}}
+            <div class="template-panel gbackround {{template.color}}" {{action "addInstance" template}}>
+              <div class="highlight">
+              </div>
+              <div class="textblock">
+                <div class="textitle">SIZE</div>
+                <div class="text">{{template.size}}</div>
+              </div>
+              <div class="textblock">
+                <div class="textitle">CAPACITY</div>
+                <div class="text">{{template.capacity}}TB</div>
+              </div>
+              <div class="textblock">
+                <div class="textitle">CONCURRENT USERS</div>
+                <div class="text">{{template.concurrentUserCount}}</div>
+              </div>
+            </div>
+          {{/each}}
+        </div>
+
+        <h5 class="text-center">OR</h5>
+
+        <div class="template-panel gbackround color4 custom">
+          <div class="textblock">
+            <div class="text">CUSTOM</div>
+          </div>
+        </div>
+
+      </form>
+    {{/modal-dialog}}
+  {{/if}}
+
+</div>
+

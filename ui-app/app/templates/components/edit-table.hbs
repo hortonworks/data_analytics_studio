@@ -1,0 +1,62 @@
+{{!
+ *   HORTONWORKS DATAPLANE SERVICE AND ITS CONSTITUENT SERVICES
+ *
+ *   (c) 2016-2018 Hortonworks, Inc. All rights reserved.
+ *
+ *   This code is provided to you pursuant to your written agreement with Hortonworks, which may be the terms of the
+ *   Affero General Public License version 3 (AGPLv3), or pursuant to a written agreement with a third party authorized
+ *   to distribute this code.  If you do not have a written agreement with Hortonworks or with an authorized and
+ *   properly licensed third party, you do not have any rights to this code.
+ *
+ *   If this code is provided to you under the terms of the AGPLv3:
+ *   (A) HORTONWORKS PROVIDES THIS CODE TO YOU WITHOUT WARRANTIES OF ANY KIND;
+ *   (B) HORTONWORKS DISCLAIMS ANY AND ALL EXPRESS AND IMPLIED WARRANTIES WITH RESPECT TO THIS CODE, INCLUDING BUT NOT
+ *     LIMITED TO IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE;
+ *   (C) HORTONWORKS IS NOT LIABLE TO YOU, AND WILL NOT DEFEND, INDEMNIFY, OR HOLD YOU HARMLESS FOR ANY CLAIMS ARISING
+ *     FROM OR RELATED TO THE CODE; AND
+ *   (D) WITH RESPECT TO YOUR EXERCISE OF ANY RIGHTS GRANTED TO YOU FOR THE CODE, HORTONWORKS IS NOT LIABLE FOR ANY
+ *     DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES INCLUDING, BUT NOT LIMITED TO,
+ *     DAMAGES RELATED TO LOST REVENUE, LOST PROFITS, LOSS OF INCOME, LOSS OF BUSINESS ADVANTAGE OR UNAVAILABILITY,
+ *     OR LOSS OR CORRUPTION OF DATA.
+}}
+
+<div class="col-md-12">
+  {{#tabs-pane tabs=tabs as |tab|}}
+    {{tabs-item tab=tab tabs=tabs}}
+  {{/tabs-pane}}
+
+  <div class="create-table-inner">
+    <div class="row">
+      {{#each tabs as |tab|}}
+        {{#if tab.active}}
+          {{#if (eq tab.link "edit.table.columns")}}
+            {{table-columns columns=columns shouldAddBuckets=shouldAddBuckets editMode=true}}
+          {{/if}}
+          {{#if (eq tab.link "edit.table.properties")}}
+            {{table-properties properties=properties editMode=true}}
+          {{/if}}
+          {{#if (eq tab.link "edit.table.advanced")}}
+            {{table-advanced-settings settings=settings shouldAddBuckets=shouldAddBuckets
+                                      errors=settingErrors editMode=true}}
+          {{/if}}
+        {{/if}}
+      {{/each}}
+    </div>
+
+  </div>
+  <div class="create-table-controls">
+    <div class="row">
+        <button class="btn btn-success" {{action "edit"}}>{{fa-icon "edit"}} Edit</button>
+        <button class="btn btn-warning" {{action "cancel"}}>{{fa-icon "times"}} Cancel</button>
+    </div>
+    <div class="row">
+      <div class="warning">
+        <div class="alert alert-danger">
+          <p>{{fa-icon "exclamation-circle" size="2"}} <strong>Warning:</strong> Operation is executed as multiple statements and they are not transactional in its entirety.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>

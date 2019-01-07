@@ -1,0 +1,196 @@
+/*
+ *
+ * HORTONWORKS DATAPLANE SERVICE AND ITS CONSTITUENT SERVICES
+ *
+ * (c) 2016-2018 Hortonworks, Inc. All rights reserved.
+ *
+ * This code is provided to you pursuant to your written agreement with Hortonworks, which may be the terms of the
+ * Affero General Public License version 3 (AGPLv3), or pursuant to a written agreement with a third party authorized
+ * to distribute this code.  If you do not have a written agreement with Hortonworks or with an authorized and
+ * properly licensed third party, you do not have any rights to this code.
+ *
+ * If this code is provided to you under the terms of the AGPLv3:
+ * (A) HORTONWORKS PROVIDES THIS CODE TO YOU WITHOUT WARRANTIES OF ANY KIND;
+ * (B) HORTONWORKS DISCLAIMS ANY AND ALL EXPRESS AND IMPLIED WARRANTIES WITH RESPECT TO THIS CODE, INCLUDING BUT NOT
+ *   LIMITED TO IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE;
+ * (C) HORTONWORKS IS NOT LIABLE TO YOU, AND WILL NOT DEFEND, INDEMNIFY, OR HOLD YOU HARMLESS FOR ANY CLAIMS ARISING
+ *   FROM OR RELATED TO THE CODE; AND
+ * (D) WITH RESPECT TO YOUR EXERCISE OF ANY RIGHTS GRANTED TO YOU FOR THE CODE, HORTONWORKS IS NOT LIABLE FOR ANY
+ *   DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES INCLUDING, BUT NOT LIMITED TO,
+ *   DAMAGES RELATED TO LOST REVENUE, LOST PROFITS, LOSS OF INCOME, LOSS OF BUSINESS ADVANTAGE OR UNAVAILABILITY,
+ *   OR LOSS OR CORRUPTION OF DATA.
+ *
+ */
+.directory-viewer{
+  width: 500px;
+}
+.directory-viewer-wrap {
+  height: 500px;
+  border: 1px solid #e2e2e2;
+}
+
+.directory-viewer .container-wrap {
+	position:relative;
+	height:400px;
+}
+.directory-viewer .top-header {
+	position: relative;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-bottom: 5px;
+	width: 500px;
+	border-bottom:1px solid #e2e2e2;
+}
+.directory-viewer .row-selected {
+	background-color:#c7ddef!important
+}
+.directory-viewer .file-row {
+	padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e2e2e2;
+}
+.directory-viewer .dropdown-menu>li>a {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #337ab7;
+    white-space: nowrap;
+}
+.directory-viewer .file-row:hover {
+    background-color: #f5f5f5;
+}
+.directory-viewer .mod-icon {
+	font-size:1.5em
+}
+.directory-viewer .elipsisClass{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 50%;
+}
+.directory-viewer .elipsis-link{
+    overflow: initial;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 50px;
+}
+.directory-viewer .pointer {
+    cursor: pointer;
+}
+.directory-viewer .breadcrumbs-label {
+	display: inline-block;
+	padding: 8px;
+}
+.directory-viewer #file-view-unix {
+	width:500px;
+	position:relative;
+	overflow:auto;
+	float:left;
+}
+.directory-viewer .padding-left-10px {
+	padding-left: 10px;
+}
+.directory-viewer .padding-right-10px {
+	padding-right: 10px;
+}
+.directory-viewer .home-icon {
+	top:3px;
+	font-size:1.5em;
+	position:relative;
+}
+.directory-viewer .breadcrumb {
+	background-color:white;
+	margin-bottom:0px;
+	padding: 0px;
+}
+.directory-viewer .container-fluid {
+	position:relative;
+	height:400px;
+}
+.directory-viewer .folder-name {
+	width:100% !important;
+}
+.directory-viewer .add-folder {
+    padding: 10px;
+    height: auto;
+    padding-top:0px;
+    padding-left:10px;
+    padding-bottom:4px;
+    margin-top:3px;
+    left:16px;
+}
+.directory-viewer .go-to-folder {
+    height: auto;
+    padding-right: 0px;
+    padding-left: 10px;
+    padding-bottom: 4px;
+    margin-top:3px;
+    left: 8px;
+}
+.directory-viewer .btn-action {
+	padding: 5px 10px;
+}
+.directory-viewer #folderPath, .directory-viewer #folderName {
+	height: 32px;
+	top: 2px;
+	position: relative;
+}
+.directory-viewer .margin-right-5 {
+	margin-right: 5px !important;
+}
+.directory-viewer a, .directory-viewer .file-system-count  {
+  color: #337ab7;
+}
+.directory-viewer .top-header button.btn{
+  color: #fff !important;
+}
+
+.directory-viewer .form-group{
+  padding-left:0px;
+  width:90%;
+}
+
+.directory-viewer button{
+  position:relative;
+  top:2px;
+  left:5px;
+}
+
+.directory-viewer .file-creation-status {
+  margin-top:10px;
+  margin-bottom:0px;
+}
+
+.directory-viewer .file-creation-success {
+  color:green;
+}
+
+.directory-viewer .file-creation-failure {
+  color:red;
+}
+
+.directory-viewer .inline {
+  display:inline-block;
+}
+
+.directory-viewer .file-viewer-settings {
+  position:relative;
+  top:5px;
+}
+
+.directory-viewer .no-padding {
+  padding:0px;
+}
+
+.directory-viewer .file-system-status {
+  margin-top:10px;
+  padding-left:20px;
+}
+
+.directory-viewer .file-system-count {
+  text-align:center;
+}

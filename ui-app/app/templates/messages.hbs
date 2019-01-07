@@ -1,0 +1,54 @@
+{{!
+ *   HORTONWORKS DATAPLANE SERVICE AND ITS CONSTITUENT SERVICES
+ *
+ *   (c) 2016-2018 Hortonworks, Inc. All rights reserved.
+ *
+ *   This code is provided to you pursuant to your written agreement with Hortonworks, which may be the terms of the
+ *   Affero General Public License version 3 (AGPLv3), or pursuant to a written agreement with a third party authorized
+ *   to distribute this code.  If you do not have a written agreement with Hortonworks or with an authorized and
+ *   properly licensed third party, you do not have any rights to this code.
+ *
+ *   If this code is provided to you under the terms of the AGPLv3:
+ *   (A) HORTONWORKS PROVIDES THIS CODE TO YOU WITHOUT WARRANTIES OF ANY KIND;
+ *   (B) HORTONWORKS DISCLAIMS ANY AND ALL EXPRESS AND IMPLIED WARRANTIES WITH RESPECT TO THIS CODE, INCLUDING BUT NOT
+ *     LIMITED TO IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE;
+ *   (C) HORTONWORKS IS NOT LIABLE TO YOU, AND WILL NOT DEFEND, INDEMNIFY, OR HOLD YOU HARMLESS FOR ANY CLAIMS ARISING
+ *     FROM OR RELATED TO THE CODE; AND
+ *   (D) WITH RESPECT TO YOUR EXERCISE OF ANY RIGHTS GRANTED TO YOU FOR THE CODE, HORTONWORKS IS NOT LIABLE FOR ANY
+ *     DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES INCLUDING, BUT NOT LIMITED TO,
+ *     DAMAGES RELATED TO LOST REVENUE, LOST PROFITS, LOSS OF INCOME, LOSS OF BUSINESS ADVANTAGE OR UNAVAILABILITY,
+ *     OR LOSS OR CORRUPTION OF DATA.
+}}
+
+<div class="row">
+  <div class="col-md-12 messages-header text-center">
+    <div class="alert alert-info">
+      <p class="lead">{{fa-icon "comment" size="lg" }} Notification Messages</p>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class={{if isExpanded "col-md-12" "col-md-4"}}>
+    <div class="list-group">
+      {{#each model as |message|}}
+        {{#link-to 'messages.message' message
+                   class=(alert-message-context-class message.type "list-group-item list-group-item-")}}
+          <h4 class="list-group-item-heading wrap-message">
+            {{#fa-stack}}
+              {{fa-icon "circle-thin" stack=2}}
+              {{fa-icon (alert-message-icon-class message.type) stack=1}}
+            {{/fa-stack}}
+            {{{message.message}}}</h4>
+          <p class="list-group-item-text wrap-message">{{shorten-text message.responseMessage shortenLength}}</p>
+        {{/link-to}}
+      {{/each}}
+    </div>
+
+  </div>
+  {{#unless isExpanded}}
+    <div class="col-md-8">
+      {{outlet}}
+    </div>
+  {{/unless}}
+</div>
+

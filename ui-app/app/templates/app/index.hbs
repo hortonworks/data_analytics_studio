@@ -1,0 +1,152 @@
+{{!
+ *   HORTONWORKS DATAPLANE SERVICE AND ITS CONSTITUENT SERVICES
+ *
+ *   (c) 2016-2018 Hortonworks, Inc. All rights reserved.
+ *
+ *   This code is provided to you pursuant to your written agreement with Hortonworks, which may be the terms of the
+ *   Affero General Public License version 3 (AGPLv3), or pursuant to a written agreement with a third party authorized
+ *   to distribute this code.  If you do not have a written agreement with Hortonworks or with an authorized and
+ *   properly licensed third party, you do not have any rights to this code.
+ *
+ *   If this code is provided to you under the terms of the AGPLv3:
+ *   (A) HORTONWORKS PROVIDES THIS CODE TO YOU WITHOUT WARRANTIES OF ANY KIND;
+ *   (B) HORTONWORKS DISCLAIMS ANY AND ALL EXPRESS AND IMPLIED WARRANTIES WITH RESPECT TO THIS CODE, INCLUDING BUT NOT
+ *     LIMITED TO IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE;
+ *   (C) HORTONWORKS IS NOT LIABLE TO YOU, AND WILL NOT DEFEND, INDEMNIFY, OR HOLD YOU HARMLESS FOR ANY CLAIMS ARISING
+ *     FROM OR RELATED TO THE CODE; AND
+ *   (D) WITH RESPECT TO YOUR EXERCISE OF ANY RIGHTS GRANTED TO YOU FOR THE CODE, HORTONWORKS IS NOT LIABLE FOR ANY
+ *     DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES INCLUDING, BUT NOT LIMITED TO,
+ *     DAMAGES RELATED TO LOST REVENUE, LOST PROFITS, LOSS OF INCOME, LOSS OF BUSINESS ADVANTAGE OR UNAVAILABILITY,
+ *     OR LOSS OR CORRUPTION OF DATA.
+}}
+
+{{#if loaded}}
+  {{#if model.app.entityID}}
+    <table class='detail-list'>
+      <thead>
+      <tr>
+        <th colspan=2>YARN App Details</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>Status</td>
+        <td>{{em-table-status-cell content=model.app.status}}</td>
+      </tr>
+      <tr>
+        <td>Final Status</td>
+        <td>{{em-table-status-cell content=model.app.finalStatus}}</td>
+      </tr>
+      <tr>
+        <td>Start Time</td>
+        <td>{{date-formatter content=model.app.startTime}}</td>
+      </tr>
+      <tr>
+        <td>End Time</td>
+        <td>{{date-formatter content=model.app.endTime}}</td>
+      </tr>
+      <tr>
+        <td>Duration</td>
+        <td>{{txt model.app.duration type="duration"}}</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <table class='detail-list'>
+      <thead>
+      <tr>
+        <th colspan=2>YARN App Description</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>Application Tracking URL</td>
+        <td><a href={{trackingURL}} target="_blank">{{model.app.entityID}}</a></td>
+      </tr>
+      <tr>
+        <td>Application Name</td>
+        <td>{{model.app.name}}</td>
+      </tr>
+      <tr>
+        <td>Queue</td>
+        <td>{{model.app.queue}}</td>
+      </tr>
+      <tr>
+        <td>Application Type</td>
+        <td>{{model.app.type}}</td>
+      </tr>
+      <tr>
+        <td>User</td>
+        <td>{{model.app.user}}</td>
+      </tr>
+      </tbody>
+    </table>
+  {{/if}}
+
+  {{#if model.entityID}}
+    <table class='detail-list'>
+      <thead>
+      <tr>
+        <th colspan=2>Tez Details</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>Entity ID</td>
+        <td>{{model.entityID}}</td>
+      </tr>
+      <tr>
+        <td>Domain</td>
+        <td>{{model.domain}}</td>
+      </tr>
+      <tr>
+        <td>User</td>
+        <td>{{model.user}}</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <table class='detail-list'>
+      <thead>
+      <tr>
+        <th colspan=2>Version Details</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>Build Version</td>
+        <td>{{model.tezVersion}}</td>
+      </tr>
+      <tr>
+        <td>Build Revision</td>
+        <td>{{model.tezRevision}}</td>
+      </tr>
+      <tr>
+        <td>Build Time</td>
+        <td>{{model.buildTime}}</td>
+      </tr>
+      </tbody>
+    </table>
+  {{/if}}
+
+  {{#unless (and model.entityID model.app.entityID)}}
+    <h2>Some data is not available!</h2>
+    <h5>No data returned from URL:
+      <i>
+        {{#unless model.entityID}}
+          {{hosts.timeline}}/{{env.app.namespaces.webService.timeline}}/{{env.app.paths.timeline.app}}/tez_{{model.appID}}
+        {{/unless}}
+        {{#unless model.app.entityID}}
+          {{#unless model.entityID}}
+            &
+          {{/unless}}
+          {{hosts.timeline}}/{{env.app.namespaces.webService.appHistory}}/apps/{{model.appID}}
+        {{/unless}}
+      </i>.
+      The data may not be available in YARN Timeline or you may not have the necessary permissions to view this data.
+    </h5>
+  {{/unless}}
+
+{{else}}
+  {{partial "loading"}}
+{{/if}}
