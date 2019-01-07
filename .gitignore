@@ -1,0 +1,62 @@
+
+# IDEA
+# ----
+.idea
+.shelf
+**/*.iml
+**/dependency-reduced-pom.xml
+/*.ipr
+/*.iws
+/out
+*/*.iml
+*/out
+project/
+
+# GRADLE
+.gradle/ 
+gradle/ 
+gradlew 
+gradlew.bat
+
+
+# Eclipse
+# -------
+*.classpath
+*.project
+*.settings
+/bin
+
+
+
+# Vim
+# ---
+*.sw[op]
+
+# Textmate
+# --------
+.textmate
+
+# Sublime Text
+# ------------
+*.sublime-*
+
+# jEnv
+# ----
+.java-version
+
+# OS X
+# ----
+.DS_Store
+
+# HPROF
+# -----
+*.hprof
+
+#target
+**/target/
+
+#Used for development time db
+**/db/*
+!**/db/migrate
+.cache-main
+.cache-tests

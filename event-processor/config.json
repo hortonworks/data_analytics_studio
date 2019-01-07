@@ -1,0 +1,76 @@
+{
+  "logging": {
+    "level": "INFO",
+    "loggers": {
+      "com.hortonworks.hivestudio": "DEBUG"
+    }
+  },
+  "jerseyClient":{
+    "timeout": "240s",
+    "connectionTimeout": "2s"
+  },
+  "event-processing":{
+    "meta.info.sync.service.delay.millis" : 60000,
+    "scan.folder.delay.millis" : 2000,
+    "actor.initialization.delay.millis" : 10000,
+
+    "hive.hook.proto.base-directory": "/warehouse/tablespace/external/hive/sys.db/query_data/",
+    "tez.history.logging.proto-base-dir": "/warehouse/tablespace/external/hive/sys.db/",
+
+    "reporting.scheduler.initial.delay.millis": 30000,
+    "reporting.scheduler.interval.delay.millis": 60000,
+
+    "reporting.scheduler.weekly.initial.delay.millis": 60000,
+    "reporting.scheduler.weekly.interval.delay.millis": 90000,
+
+    "reporting.scheduler.monthly.initial.delay.millis": 90000,
+    "reporting.scheduler.monthly.interval.delay.millis": 120000,
+
+    "reporting.scheduler.quarterly.initial.delay.millis": 120000,
+    "reporting.scheduler.quarterly.interval.delay.millis": 150000
+
+  },
+  "database": {
+    "driverClass": "org.postgresql.Driver",
+    "url": "jdbc:postgresql://localhost:5432/hsdev",
+    "user": "hstest",
+    "password": "hstest",
+    "properties": {
+    }
+  },
+  "server": {
+    "applicationConnectors": [
+      {
+        "type": "http",
+        "port": 9090
+      }
+    ],
+    "adminConnectors": [
+      {
+        "type": "http",
+        "port": 9091
+      }
+    ]
+  },
+  "akka":{
+    "properties": {
+      "akka.loglevel": "INFO",
+      "akka.stdout-loglevel": "INFO",
+      "akka.loggers.0": "akka.event.slf4j.Slf4jLogger"
+    }
+  },
+  "authConfig": {
+    "enabled": false,
+    "appUserName": "hive",
+    "serviceAuthType": "",
+    "serviceKeytab": "",
+    "servicePrincipal": ""
+  },
+  "serviceConfigDirectory" : "./conf/dev/",
+  "environment": "development",
+
+  "hiveSessionParams": "",
+  "credentialProviderPath": "",
+  "passwordAliases": []
+
+}

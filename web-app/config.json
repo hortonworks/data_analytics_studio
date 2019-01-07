@@ -1,0 +1,68 @@
+{
+  "logging": {
+    "level": "INFO",
+    "loggers": {
+      "com.hortonworks.hivestudio": "DEBUG"
+    }
+  },
+  "jerseyClient":{
+
+  },
+  "database": {
+    "driverClass": "org.postgresql.Driver",
+    "url": "jdbc:postgresql://localhost:5432/hsdev",
+    "user": "hstest",
+    "password": "hstest",
+    "minSize": 8,
+    "maxSize": 32,
+    "properties": {
+    }
+  },
+  "flyway": {
+    "schemas": ["das"],
+    "locations": [
+      "db/migrate/common", "db/migrate/dev"
+    ]
+  },
+  "akka":{
+    "properties": {
+      "akka.loglevel": "DEBUG",
+      "akka.stdout-loglevel": "WARNING",
+      "akka.actor.jdbc-connector-dispatcher.fork-join-executor.parallelism-factor": 5.0,
+      "akka.actor.result-dispatcher.fork-join-executor.parallelism-factor": 10.0,
+      "akka.actor.misc-dispatcher.fork-join-executor.parallelism-factor": 5.0
+    }
+  },
+  "gaConfiguration": {
+    "enabled": false,
+    "identifier": "UA-22950817-34"
+  },
+  "authConfig": {
+    "enabled": false,
+    "appUserName": "hive",
+    "adminUsers": "admin",
+    "serviceAuthType": "",
+    "serviceKeytab": "",
+    "servicePrincipal": "",
+
+    "ldapSSOEnabled": false,
+    "ldapUrl": "ldap://localhost:33389",
+    "ldapSecurityPrinciple": "uid=admin,ou=people,dc=hadoop,dc=apache,dc=org",
+    "ldapPassword": "admin-password",
+
+    "knoxSSOEnabled": false,
+    "knoxSSOUrl": "",
+    "knoxPublicKey": "",
+    "knoxCookieName": "hadoop-jwt",
+    "knoxUrlParamName": "originalUrl",
+    "knoxUserAgent": "Chrome,Mozilla,Opera"
+  },
+  "smartsenseId": "dummy_id",
+  "serviceConfigDirectory" : "./conf/dev/",
+  "environment": "development",
+
+  "hiveSessionParams": "",
+  "credentialProviderPath": "",
+  "passwordAliases": []
+
+}

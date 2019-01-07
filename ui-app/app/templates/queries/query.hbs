@@ -1,0 +1,196 @@
+{{!
+ *   HORTONWORKS DATAPLANE SERVICE AND ITS CONSTITUENT SERVICES
+ *
+ *   (c) 2016-2018 Hortonworks, Inc. All rights reserved.
+ *
+ *   This code is provided to you pursuant to your written agreement with Hortonworks, which may be the terms of the
+ *   Affero General Public License version 3 (AGPLv3), or pursuant to a written agreement with a third party authorized
+ *   to distribute this code.  If you do not have a written agreement with Hortonworks or with an authorized and
+ *   properly licensed third party, you do not have any rights to this code.
+ *
+ *   If this code is provided to you under the terms of the AGPLv3:
+ *   (A) HORTONWORKS PROVIDES THIS CODE TO YOU WITHOUT WARRANTIES OF ANY KIND;
+ *   (B) HORTONWORKS DISCLAIMS ANY AND ALL EXPRESS AND IMPLIED WARRANTIES WITH RESPECT TO THIS CODE, INCLUDING BUT NOT
+ *     LIMITED TO IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE;
+ *   (C) HORTONWORKS IS NOT LIABLE TO YOU, AND WILL NOT DEFEND, INDEMNIFY, OR HOLD YOU HARMLESS FOR ANY CLAIMS ARISING
+ *     FROM OR RELATED TO THE CODE; AND
+ *   (D) WITH RESPECT TO YOUR EXERCISE OF ANY RIGHTS GRANTED TO YOU FOR THE CODE, HORTONWORKS IS NOT LIABLE FOR ANY
+ *     DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES INCLUDING, BUT NOT LIMITED TO,
+ *     DAMAGES RELATED TO LOST REVENUE, LOST PROFITS, LOSS OF INCOME, LOSS OF BUSINESS ADVANTAGE OR UNAVAILABILITY,
+ *     OR LOSS OR CORRUPTION OF DATA.
+}}
+
+{{!--multiple-database-search-bar databases=alldatabases selectedMultiDb=selectedMultiDb changeDbHandler="changeDbHandler" --}}
+
+{{#if model.apiAcessError}}
+    {{error-notification message="There is some problem while connecting to the server.Try again." classNames="hs-error editor-api-error"}}
+{{else}}
+      <div class="db-panel-parent col-lg-2 col-md-3 col-sm-4 col-xs-12">
+        {{database-panel timeSinceLastUpdate=timeSinceLastUpdate selectedDb=selectedDb selectedTablesModels=selectedTablesModels alldatabases=alldatabases model=model filteredItems=selectedTablesModels databases=alldatabases selectedMultiDb=selectedMultiDb changeDbHandler="changeDbHandler" expandQueryPanel="expandQueryEdidorPanel"}}
+      </div>
+      {{#if (eq model.id "saved")}}
+        <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12 saved-query-tab query-editor-panel">
+          <div class="saved-compose">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="btn-group left">
+                  {{#if isShowUDF}}
+                    <div class="udf-new">
+                        {{#link-to 'udfs.new' class="btn btn-primary udf-create"}} NEW UDF{{/link-to}}
+                    </div>
+                  {{/if}}
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="btn-group pull-right saved-control">
+                    <label class="control-label pull-left">View: &nbsp; &nbsp;</label>
+                    <button type="button" class="btn {{if isShowSavedquery "btn-primary"}}" {{action "showSavedquery"}}>Query</button>
+                    {{#if  (not disable_UDF_SETTINGS)}}
+                      <button type="button" class="btn  {{if isShowUDF "btn-primary"}}" {{action "showUDF"}}>UDF</button>
+                    {{/if}}
+                  </div>
+                </div>
+              </div>
+            {{# if isShowSavedquery}}
+              <div class="saved-queries-compose {{unless savedQuerylist "no-saved-queries"}}">
+                {{saved-query-list savedQuerylist=savedQuerylist openAsWorksheet="openAsWorksheet" openDeleteSavedQueryModal="openDeleteSavedQueryModal"}}
+              </div>
+            {{else if (isShowUDF and (not disable_UDF_SETTINGS)) }}
+
+              <div class="udf-compose {{unless allUDFList "no-udf"}}">
+                  {{udf-list
+                  udflist=allUDFList
+                  fileResourceList = fileResourceList
+                  showEditUdf="showEditUdf"
+                  showRemoveUdfModal="showRemoveUdfModal"
+                  cancelUdf="cancelUdf" }}
+                  {{outlet}}
+                {{#if showDeleteUdfModal}}
+                  {{confirm-dialog
+                  title="Confirm"
+                  label="Do you want to delete the Udf?"
+                  titleIcon="minus"
+                  labelIcon="remove"
+                  rejectIcon="times"
+                  confirmIcon="check"
+                  closable=false
+                  confirmClass="success"
+                  confirm="removeUdf"
+                  reject="cancelUdf"
+                  }}
+                {{/if}}
+
+              </div>
+            {{/if}}
+          </div>
+        </div>
+      {{else}}
+        <div class="clearfix col-lg-10 col-md-9 col-sm-8 col-xs-12 query-editor-panel">
+        <div class="tab-results">
+
+        <div class="query-editor-container">
+            <div class="row query-editor" style="position:relative">
+                <span class="expand-button" {{action "expandQueryEdidorPanel" }} >
+          {{fa-icon "expand"}}
+                </span>
+                {{#unless model.queryEditorMaximised}}
+                    {{query-editor highlightedText=highlightedText query=currentQuery updateQuery='updateQuery'allUDFList=allUDFList systemUDFLIST = systemUDFList selectedDb=selectedDb selectedTablesModels=selectedTablesModels alldatabases=alldatabases model=model filteredItems=selectedTablesModels databases=alldatabases selectedMultiDb=selectedMultiDb changeDbHandler="changeDbHandler" expandQueryPanel="expandQueryEdidorPanel" showUDF=disable_UDF_SETTINGS}}
+                {{/unless}}
+            </div>
+            <div class="row query-editor-controls">
+                {{#if isJobCreated}}
+                    {{#if isJobCancelled}}
+                        <button class="btn btn-warning button-mod" disabled >{{fa-icon "ban"}} Stopping</button>
+                    {{else}}
+                        <button class="btn btn-warning button-mod" {{action "stopQuery" }} >{{fa-icon "ban"}} Stop</button>
+                    {{/if}}
+                {{else}}
+                    <button class="btn btn-success button-mod" {{action "executeQuery" }} disabled={{ worksheet.isQueryRunning}} >EXECUTE</button>
+                {{/if}}
+                <div class="btn-group save-as-container">
+                      <button class="btn btn-default dropdown-toggle save-as" id="save-as" data-toggle="dropdown" {{action "openWorksheetModal" }}  >
+                        Save As <span class="fa fa-caret-down"></span>
+                      </button>
+                      <div class="dropdown-menu save-as">
+                        <div class="col-md-12">
+                          <form>
+                            <div class="form-group">
+                              {{input type="text" class="form-control" id="worksheet-title" placeholder="Title" value=worksheetTitle }}
+                            </div>
+                            <button type="button" class="btn btn-success" disabled={{not worksheet.title}} {{action "saveWorksheetModal"}}>
+                              <i class="fa fa-check-circle"></i>
+                            </button>
+
+                            <button type="button" class="btn btn-default" {{action "closeWorksheetSavePanel"}}>
+                              {{fa-icon "close"}}
+                            </button>
+                            <br />
+                            {{#if worksheetModalSuccess }}
+                              <div class="text-success">Successfully Saved.</div>
+                            {{else if worksheetModalFail }}
+                              <div class="text-danger">Error while saving.</div>
+                            {{else}}
+                              <div class="text-danger">{{savedQueryErrorMsg}}</div>
+                            {{/if}}
+
+                          </form>
+                        </div>
+                      </div>
+                </div>
+
+                <!--<span class="padding-cls"></span>-->
+                <button class="btn btn-default visual-exp label-clr" {{action "visualExplainQuery" }} disabled={{ worksheet.isQueryRunning}}>Visual Explain{{!--fa-icon "eye"--}} </button>
+                <!--<span class="padding-cls"></span>-->
+                {{#if  (not disable_UDF_SETTINGS)}}
+                  <div class="btn-group">
+                        <button class="btn btn-default dropdown-toggle label-clr" type="button" data-toggle="dropdown" disabled={{ not allUDFList.length }}>UDF
+                                <span class="fa fa-caret-down"></span>
+                        </button>
+                        <ul class="dropdown-menu label-clr">
+                            {{#each fileResourceList as |fileResource|}}
+                                {{fileresource-item fileResource=fileResource createQuery='createQuery' allUDFList=allUDFList}}
+                            {{/each}}
+                        </ul>
+                  </div>
+                {{/if}}
+            <label class="result-options" title="Uncheck to not load results in browser">
+                {{input type="checkbox" id="show-results" class="show-results" checked=model.showResults}}Show Results
+            </label>
+            <label class=" result-options" title="Check to download results in csv format">
+                {{input type="checkbox" id="download-results" class="download-results" checked=model.downloadResults}}Download Results
+            </label>
+            {{#if (or worksheet.isQueryRunning isJobCreated)}}
+              {{fa-icon "spinner fa-1-5 middle-align compose-loader" spin=true}}
+            {{/if}}
+          </div>
+        </div>
+        {{#if (or worksheet.isJobSuccess model.show-status)}}
+            {{#tabs-pane tabs=tabs as |tab|}}
+                {{tabs-item tab=tab tabs=tabs}}
+            {{/tabs-pane}}
+            {{outlet}}
+        {{/if}}
+      </div>
+    </div>
+    {{/if}}
+
+    {{#if dataPreview}}
+        <div class="alert alert-info text-center test">
+            <p class="lead">Data Loading... Please wait. {{fa-icon "refresh" spin=true}}</p>
+        </div>
+    {{/if}}
+      {{#if showDeleteSaveQueryModal}}
+        {{confirm-dialog
+                title="Confirm"
+                label="Do you want to delete the saved query?"
+                titleIcon="minus"
+                labelIcon="save"
+                rejectIcon="times"
+                confirmIcon="check"
+                closable=false
+                confirmClass="success"
+                confirm="deleteSavedQuery"
+                reject="deleteSavedQueryDeclined"
+        }}
+      {{/if}}
+{{/if}}

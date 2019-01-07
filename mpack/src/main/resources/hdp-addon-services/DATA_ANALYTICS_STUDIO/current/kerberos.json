@@ -1,0 +1,68 @@
+{
+  "services": [
+    {
+      "name": "DATA_ANALYTICS_STUDIO",
+      "configurations": [
+        {
+          "data_analytics_studio-security-site": {
+            "authentication_enabled": "true",
+            "service_authentication_type": "kerberos"
+          }
+        }
+      ],
+      "components": [
+        {
+          "name": "DATA_ANALYTICS_STUDIO_WEBAPP",
+          "identities": [
+            {
+              "name": "das_webapp",
+              "principal": {
+                "value": "hive/_HOST@${realm}",
+                "type" : "service",
+                "configuration": "data_analytics_studio-webapp-properties/service_principal",
+                "local_username": "${hive-env/hive_user}"
+              },
+              "keytab": {
+                "file": "${keytab_dir}/das.webapp.service.keytab",
+                "owner": {
+                  "name": "${hive-env/hive_user}",
+                  "access": "r"
+                },
+                "group": {
+                  "name": "${cluster-env/user_group}",
+                  "access": "r"
+                },
+                "configuration": "data_analytics_studio-webapp-properties/service_keytab"
+              }
+            }
+          ]
+        } , {
+          "name": "DATA_ANALYTICS_STUDIO_EVENT_PROCESSOR",
+          "identities": [
+            {
+              "name": "das_event_processor",
+              "principal": {
+                "value": "hive/_HOST@${realm}",
+                "type" : "service",
+                "configuration": "data_analytics_studio-event_processor-properties/service_principal",
+                "local_username": "${hive-env/hive_user}"
+              },
+              "keytab": {
+                "file": "${keytab_dir}/das.event_processor.service.keytab",
+                "owner": {
+                  "name": "${hive-env/hive_user}",
+                  "access": "r"
+                },
+                "group": {
+                  "name": "${cluster-env/user_group}",
+                  "access": "r"
+                },
+                "configuration": "data_analytics_studio-event_processor-properties/service_keytab"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

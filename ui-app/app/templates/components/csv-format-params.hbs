@@ -1,0 +1,142 @@
+{{!
+ *   HORTONWORKS DATAPLANE SERVICE AND ITS CONSTITUENT SERVICES
+ *
+ *   (c) 2016-2018 Hortonworks, Inc. All rights reserved.
+ *
+ *   This code is provided to you pursuant to your written agreement with Hortonworks, which may be the terms of the
+ *   Affero General Public License version 3 (AGPLv3), or pursuant to a written agreement with a third party authorized
+ *   to distribute this code.  If you do not have a written agreement with Hortonworks or with an authorized and
+ *   properly licensed third party, you do not have any rights to this code.
+ *
+ *   If this code is provided to you under the terms of the AGPLv3:
+ *   (A) HORTONWORKS PROVIDES THIS CODE TO YOU WITHOUT WARRANTIES OF ANY KIND;
+ *   (B) HORTONWORKS DISCLAIMS ANY AND ALL EXPRESS AND IMPLIED WARRANTIES WITH RESPECT TO THIS CODE, INCLUDING BUT NOT
+ *     LIMITED TO IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE;
+ *   (C) HORTONWORKS IS NOT LIABLE TO YOU, AND WILL NOT DEFEND, INDEMNIFY, OR HOLD YOU HARMLESS FOR ANY CLAIMS ARISING
+ *     FROM OR RELATED TO THE CODE; AND
+ *   (D) WITH RESPECT TO YOUR EXERCISE OF ANY RIGHTS GRANTED TO YOU FOR THE CODE, HORTONWORKS IS NOT LIABLE FOR ANY
+ *     DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES INCLUDING, BUT NOT LIMITED TO,
+ *     DAMAGES RELATED TO LOST REVENUE, LOST PROFITS, LOSS OF INCOME, LOSS OF BUSINESS ADVANTAGE OR UNAVAILABILITY,
+ *     OR LOSS OR CORRUPTION OF DATA.
+}}
+
+<div class="panel panel-info">
+  <div class="panel-heading">
+    <div class="panel-title">
+      <button class="btn btn-circle {{if showCSVFormatInput 'active'}}" {{action
+      "toggleCSVFormat"}}>
+      {{fa-icon (if showCSVFormatInput "minus" "plus")}}
+      </button>
+      &nbsp;&nbsp;&nbsp;Select File Format
+    </div>
+  </div>
+  {{#if showCSVFormatInput}}
+  <div class="panel-body rowformat-custom-row">
+    <div class="row">
+      <div class="col-md-6 form-horizontal">
+        <div class="form-group">
+          <label class="col-md-4 control-label">{{t 'hive.ui.fileSource.fileType'}}</label>
+          <div class="col-md-6">
+            {{#power-select
+            selected=fileFormatInfo.inputFileType
+            options=inputFileTypes
+            searchField="name"
+            searchPlaceholder=(t 'hive.ui.fileSource.selectFileType')
+            onchange=(action "inputFileTypeSelected") as |parameter|}}
+            {{parameter.name}}{{#if parameter.description}} - {{parameter.description}}{{/if}}
+            {{/power-select}}
+          </div>
+          <div class="col-md-2">
+            <a class="clear-selection" {{action "clearInputFileType"}}>Clear</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {{#if inputFileTypeCSV}}
+
+    <div class="row">
+      <div class="col-md-6 form-horizontal">
+        <div class="form-group">
+          <label class="col-md-4 control-label">{{t 'hive.ui.csvFormatParams.columnDelimterField'}}</label>
+          <div class="col-md-6">
+            {{#power-select
+            selected=fileFormatInfo.csvParams.csvDelimiter
+            options=terminationChars
+            searchField="name"
+            searchPlaceholder=(t 'hive.ui.csvFormatParams.columnDelimiterTooltip')
+            onchange=(action "csvDelimiterSelected") as |parameter|}}
+            {{parameter.name}}{{#if parameter.description}} - {{parameter.description}}{{/if}}
+            {{/power-select}}
+          </div>
+          <div class="col-md-2">
+            <a class="clear-selection" {{action "clearColumnDelimter"}}>Clear</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 form-horizontal">
+        <div class="form-group">
+          <label class="col-md-4 control-label">{{t 'hive.ui.csvFormatParams.escapeCharacterField'}}</label>
+          <div class="col-md-6">
+            {{#power-select
+            selected=fileFormatInfo.csvParams.csvEscape
+            options=terminationChars
+            searchField="name"
+            searchPlaceholder=(t 'hive.ui.csvFormatParams.escapeCharacterTooltip')
+            onchange=(action "csvEscapeSelected") as |parameter|}}
+            {{parameter.name}}{{#if parameter.description}} - {{parameter.description}}{{/if}}
+            {{/power-select}}
+          </div>
+          <div class="col-md-2">
+            <a class="clear-selection" {{action "clearEscapeCharacter"}}>Clear</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 form-horizontal">
+        <div class="form-group">
+          <label class="col-md-4 control-label">{{t 'hive.ui.csvFormatParams.quoteCharacterField'}}</label>
+          <div class="col-md-6">
+            {{#power-select
+            selected=fileFormatInfo.csvParams.csvQuote
+            options=terminationChars
+            searchField="name"
+            searchPlaceholder=(t 'hive.ui.csvFormatParams.quoteCharacterTooltip')
+            onchange=(action "csvQuoteSelected") as |parameter|}}
+            {{parameter.name}}{{#if parameter.description}} - {{parameter.description}}{{/if}}
+            {{/power-select}}
+          </div>
+          <div class="col-md-2">
+            <a class="clear-selection" {{action "clearCsvQuote"}}>Clear</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 form-horizontal">
+        <div class="form-group">
+          <label class="col-md-4 control-label">{{t 'hive.ui.csvFormatParams.isFirstRowHeader'}}</label>
+          <div class="col-md-8">
+            {{input type="checkbox" checked=fileFormatInfo.csvParams.isFirstRowHeader}}
+          </div>
+        </div>
+      </div>
+    </div>
+    {{/if}}
+    <div class="row">
+      <div class="col-md-6 form-horizontal">
+        <div class="form-group">
+          <label class="col-md-4 control-label">{{t 'hive.ui.csvFormatParams.containsEndlines'}}</label>
+          <div class="col-md-8">
+            {{input type="checkbox" checked=fileFormatInfo.containsEndlines}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{/if}}
+</div>
+
+{{yield}}

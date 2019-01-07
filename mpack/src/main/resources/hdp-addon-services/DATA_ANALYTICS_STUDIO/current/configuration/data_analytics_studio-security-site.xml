@@ -1,0 +1,130 @@
+<?xml version="1.0"?>
+<!--
+  HORTONWORKS DATAPLANE SERVICE AND ITS CONSTITUENT SERVICES
+
+  (c) 2016-2018 Hortonworks, Inc. All rights reserved.
+
+  This code is provided to you pursuant to your written agreement with Hortonworks, which may be the terms of the
+  Affero General Public License version 3 (AGPLv3), or pursuant to a written agreement with a third party authorized
+  to distribute this code.  If you do not have a written agreement with Hortonworks or with an authorized and
+  properly licensed third party, you do not have any rights to this code.
+
+  If this code is provided to you under the terms of the AGPLv3:
+  (A) HORTONWORKS PROVIDES THIS CODE TO YOU WITHOUT WARRANTIES OF ANY KIND;
+  (B) HORTONWORKS DISCLAIMS ANY AND ALL EXPRESS AND IMPLIED WARRANTIES WITH RESPECT TO THIS CODE, INCLUDING BUT NOT
+    LIMITED TO IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE;
+  (C) HORTONWORKS IS NOT LIABLE TO YOU, AND WILL NOT DEFEND, INDEMNIFY, OR HOLD YOU HARMLESS FOR ANY CLAIMS ARISING
+    FROM OR RELATED TO THE CODE; AND
+  (D) WITH RESPECT TO YOUR EXERCISE OF ANY RIGHTS GRANTED TO YOU FOR THE CODE, HORTONWORKS IS NOT LIABLE FOR ANY
+    DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES INCLUDING, BUT NOT LIMITED TO,
+    DAMAGES RELATED TO LOST REVENUE, LOST PROFITS, LOSS OF INCOME, LOSS OF BUSINESS ADVANTAGE OR UNAVAILABILITY,
+    OR LOSS OR CORRUPTION OF DATA.
+-->
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+  <property>
+    <name>admin_users</name>
+    <value></value>
+    <description>List of admin users</description>
+  </property>
+  <property>
+    <name>authentication_enabled</name>
+    <value>false</value>
+    <description>Enable Authentication</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+  </property>
+  <property>
+    <name>knox_sso_enabled</name>
+    <value>false</value>
+    <description>Enable Knox SSO</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+  </property>
+  <property>
+    <name>knox_useragent</name>
+    <value>Mozilla,Chrome</value>
+    <description>Comma seperated browser agent</description>
+  </property>
+  <property>
+    <name>knox_sso_url</name>
+    <value></value>
+    <description>Example: https://KNOX_HOST:KNOX_PORT/gateway/knoxsso/api/v1/websso</description>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+    <depends-on>
+      <property>
+        <type>gateway-site</type>
+        <name>gateway.port</name>
+      </property>
+    </depends-on>
+  </property>
+  <property>
+    <name>knox_publickey</name>
+    <value></value>
+    <description></description>
+    <value-attributes>
+      <type>multiLine</type>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+  </property>
+  <property>
+    <name>knox_cookiename</name>
+    <value>hadoop-jwt</value>
+    <description>Parameter name for SSO cookie</description>
+  </property>
+  <property>
+    <name>knox_url_query_param</name>
+    <value>originalUrl</value>
+    <description>Query name for appending original url in SSO url</description>
+  </property>
+  <property>
+    <name>ssl_enabled</name>
+    <value>false</value>
+    <description>Use ssl</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+  </property>
+  <property>
+    <name>webapp_keystore_file</name>
+    <value></value>
+    <description>Keystore with ssl certificate used by webapp</description>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+  </property>
+  <property>
+    <name>das_webapp_keystore_password</name>
+    <value> </value>
+    <property-type>PASSWORD</property-type>
+    <description>Webapp keystore password</description>
+    <value-attributes>
+      <type>password</type>
+      <overridable>false</overridable>
+      <keystore>true</keystore>
+    </value-attributes>
+  </property>
+  <property>
+    <name>event_processor_keystore_file</name>
+    <value></value>
+    <description>Keystore with ssl certificate used by event processor</description>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+  </property>
+  <property>
+    <name>das_event_processor_keystore_password</name>
+    <value> </value>
+    <property-type>PASSWORD</property-type>
+    <description>Event processor keystore password</description>
+    <value-attributes>
+      <type>password</type>
+      <overridable>false</overridable>
+      <keystore>true</keystore>
+    </value-attributes>
+  </property>
+</configuration>
